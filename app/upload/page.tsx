@@ -80,7 +80,7 @@ export default function UploadPage() {
             Upload Your <span className="text-christmasRed">Doorbell Video</span>
           </h1>
           <p className="mt-4 text-lg text-charcoal/70 font-body max-w-2xl">
-            Upload your doorbell footage and we'll transform it into a magical Santa video for just £12.50
+            Upload your doorbell footage and we&apos;ll transform it into a magical Santa video for just £12.50
           </p>
         </div>
 

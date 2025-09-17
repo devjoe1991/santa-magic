@@ -164,7 +164,7 @@ export default function HowItWorksPage() {
             Ready to Create Magic?
           </h2>
           <p className="text-lg font-body mb-6 text-snowWhite/90">
-            Join thousands of families who've already created unforgettable Christmas memories
+            Join thousands of families who&apos;ve already created unforgettable Christmas memories
           </p>
           <Link
             className={cn(
@@ -217,7 +217,7 @@ export default function HowItWorksPage() {
                 Can I get a refund?
               </h3>
               <p className="text-charcoal/70 font-body text-sm">
-                We offer a 100% satisfaction guarantee. If you're not happy with your video, we'll refund your payment.
+                We offer a 100% satisfaction guarantee. If you&apos;re not happy with your video, we&apos;ll refund your payment.
               </p>
             </Card>
           </div>

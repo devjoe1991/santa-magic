@@ -274,7 +274,7 @@ export default function Home() {
                   What Families Are Saying
                 </h2>
                 <p className="mt-4 text-lg text-charcoal/70 font-body">
-                  Join thousands of families who've created magical Christmas memories
+                  Join thousands of families who&apos;ve created magical Christmas memories
                 </p>
               </div>
             </div>
@@ -285,8 +285,8 @@ export default function Home() {
                   <div className="text-2xl mr-2">⭐⭐⭐⭐⭐</div>
                 </div>
                 <p className="text-charcoal/80 font-body mb-4">
-                  "Absolutely magical! My kids were amazed when they saw Santa at our door. 
-                  The video quality is incredible and it arrived within 10 minutes!"
+                  &quot;Absolutely magical! My kids were amazed when they saw Santa at our door. 
+                  The video quality is incredible and it arrived within 10 minutes!&quot;
                 </p>
                 <div className="font-semibold text-christmasRed font-heading">- Sarah M.</div>
               </Card>
@@ -296,8 +296,8 @@ export default function Home() {
                   <div className="text-2xl mr-2">⭐⭐⭐⭐⭐</div>
                 </div>
                 <p className="text-charcoal/80 font-body mb-4">
-                  "Perfect Christmas gift! The whole process was so easy and the result 
-                  exceeded our expectations. Will definitely use again next year!"
+                  &quot;Perfect Christmas gift! The whole process was so easy and the result 
+                  exceeded our expectations. Will definitely use again next year!&quot;
                 </p>
                 <div className="font-semibold text-christmasRed font-heading">- James L.</div>
               </Card>
@@ -307,8 +307,8 @@ export default function Home() {
                   <div className="text-2xl mr-2">⭐⭐⭐⭐⭐</div>
                 </div>
                 <p className="text-charcoal/80 font-body mb-4">
-                  "The AI technology is incredible - you can't tell it's not real! 
-                  My family shared this video everywhere. Worth every penny!"
+                  &quot;The AI technology is incredible - you can&apos;t tell it&apos;s not real! 
+                  My family shared this video everywhere. Worth every penny!&quot;
                 </p>
                 <div className="font-semibold text-christmasRed font-heading">- Emma R.</div>
               </Card>
