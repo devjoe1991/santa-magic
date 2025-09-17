@@ -17,6 +17,18 @@ module.exports = {
     },
     extend: {
       colors: {
+        // 🎅 Christmas Theme Colors
+        christmasRed: "#C1272D",
+        evergreen: "#1B4D3E",
+        snowWhite: "#FFFFFF",
+        warmGold: "#FFD700",
+        frostBlue: "#A9D6E5",
+        cream: "#FFF9F0",
+        charcoal: "#1E1E1E",
+        coolGray: "#D1D5DB",
+        lightFrost: "#F3F4F6",
+        
+        // Shadcn UI Colors (keeping for compatibility)
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -24,12 +36,12 @@ module.exports = {
         special: "hsl(var(--special))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#C1272D", // Christmas Red
+          foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#1B4D3E", // Evergreen
+          foreground: "#FFFFFF",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -40,8 +52,8 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#FFD700", // Warm Gold
+          foreground: "#1E1E1E",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -51,6 +63,16 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      fontFamily: {
+        heading: ["'Playfair Display'", "serif"],
+        body: ["Inter", "sans-serif"],
+        festive: ["'Mountains of Christmas'", "serif"],
+      },
+      boxShadow: {
+        glow: "0px 4px 20px rgba(193, 39, 45, 0.2)",
+        gold: "0px 4px 20px rgba(255, 215, 0, 0.4)",
+        frost: "0px 6px 24px rgba(169, 214, 229, 0.2)",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -31,7 +31,7 @@ const Navbar = () => {
               quality={100}
               className="w-7 h-7"
             />
-            <span className="text-2xl font-semibold">Convo</span>
+            <span className="text-2xl font-heading font-bold text-christmasRed">🎅 Seasonal Santa</span>
           </Link>
           <div className="flex gap-1 sm:gap-4 items-center">
             {!isUserSignedIn ? (
@@ -52,30 +52,31 @@ const Navbar = () => {
               {!isUserSignedIn ? (
                 <>
                   <Link
-                    href="/pricing"
+                    href="/how-it-works"
                     className={buttonVariants({
                       variant: "ghost",
                       size: "sm",
                     })}
                   >
-                    Pricing
+                    How It Works
                   </Link>
                   <Link
                     className={buttonVariants({
                       variant: "ghost",
                       size: "sm",
                     })}
-                    href="/sign-in"
+                    href="/faq"
                   >
-                    Sign in
+                    FAQ
                   </Link>
                   <Link
                     className={buttonVariants({
                       size: "sm",
+                      className: "bg-christmasRed hover:bg-[#A71D23] text-white shadow-glow"
                     })}
-                    href="/sign-up"
+                    href="/upload"
                   >
-                    Get started
+                    Upload Video 🎬
                   </Link>
                 </>
               ) : (
