@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Mountains_of_Christmas } from "next/font/google";
+import { Bebas_Neue, Montserrat, Poppins, Mountains_of_Christmas } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
-const mountains = Mountains_of_Christmas({ 
-  subsets: ["latin"], 
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
   weight: "400",
-  variable: "--font-mountains" 
+  variable: "--font-bebas"
+});
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
+  variable: "--font-montserrat"
+});
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins"
+});
+const mountains = Mountains_of_Christmas({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-mountains"
 });
 
 export const metadata: Metadata = {
@@ -27,8 +40,9 @@ export default function RootLayout({
       <body
         className={cn(
           "grainy flex min-h-screen flex-col font-body antialiased",
-          inter.variable,
-          playfair.variable,
+          bebasNeue.variable,
+          montserrat.variable,
+          poppins.variable,
           mountains.variable,
         )}
       >

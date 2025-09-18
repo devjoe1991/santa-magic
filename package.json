@@ -11,14 +11,17 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@supabase/supabase-js": "^2.57.4",
     "@tailwindcss/typography": "^0.5.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "geist": "^1.1.0",
     "lucide-react": "^0.294.0",
     "next": "14.0.3",
+    "openai": "^5.21.0",
     "react": "^18",
     "react-dom": "^18",
+    "stripe": "^18.5.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7"
   },
