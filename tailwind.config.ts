@@ -17,8 +17,10 @@ module.exports = {
     },
     extend: {
       colors: {
-        // 🎅 Christmas Theme Colors
-        christmasRed: "#C1272D",
+        // 🎅 Enhanced Christmas Theme Colors - Bold & Vibrant
+        christmasRed: "#FF0040",
+        electricGreen: "#00FF88",
+        berryRed: "#D2001F",
         evergreen: "#1B4D3E",
         snowWhite: "#FFFFFF",
         warmGold: "#FFD700",
@@ -36,7 +38,7 @@ module.exports = {
         special: "hsl(var(--special))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#C1272D", // Christmas Red
+          DEFAULT: "#FF0040", // Vibrant Christmas Red
           foreground: "#FFFFFF",
         },
         secondary: {
@@ -65,14 +67,43 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: ["'Playfair Display'", "serif"],
-        body: ["Inter", "sans-serif"],
-        festive: ["'Mountains of Christmas'", "serif"],
+        display: ["var(--font-bebas)", "Impact", "Arial Black", "sans-serif"],
+        heading: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        body: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        festive: ["var(--font-mountains)", "serif"],
+      },
+      fontSize: {
+        // Massive Typography Scale
+        'display': ['7.5rem', { lineHeight: '0.9', letterSpacing: '-0.02em', fontWeight: '400' }], // 120px
+        'display-sm': ['4.5rem', { lineHeight: '0.95', letterSpacing: '-0.02em', fontWeight: '400' }], // 72px
+        'hero': ['4rem', { lineHeight: '1', letterSpacing: '-0.01em', fontWeight: '900' }], // 64px
+        'hero-sm': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.01em', fontWeight: '900' }], // 48px
+        'title': ['3.5rem', { lineHeight: '1.1', fontWeight: '800' }], // 56px
+        'title-sm': ['2.25rem', { lineHeight: '1.2', fontWeight: '800' }], // 36px
+        'subtitle': ['2.5rem', { lineHeight: '1.2', fontWeight: '700' }], // 40px
+        'subtitle-sm': ['1.75rem', { lineHeight: '1.3', fontWeight: '700' }], // 28px
+        'body-lg': ['1.25rem', { lineHeight: '1.5', fontWeight: '500' }], // 20px
+        'body': ['1.125rem', { lineHeight: '1.5', fontWeight: '400' }], // 18px
+        'button-lg': ['1.25rem', { lineHeight: '1.5', fontWeight: '700' }], // 20px
+        'button': ['1.125rem', { lineHeight: '1.5', fontWeight: '600' }], // 18px
       },
       boxShadow: {
-        glow: "0px 4px 20px rgba(193, 39, 45, 0.2)",
+        // Enhanced Glow Effects
+        glow: "0px 4px 20px rgba(255, 0, 64, 0.4), 0px 0px 40px rgba(255, 0, 64, 0.2)",
+        "glow-lg": "0px 8px 40px rgba(255, 0, 64, 0.6), 0px 0px 60px rgba(255, 0, 64, 0.3)",
+        "glow-pulse": "0px 0px 20px rgba(255, 0, 64, 0.5), 0px 0px 40px rgba(255, 0, 64, 0.3), 0px 0px 60px rgba(255, 0, 64, 0.1)",
         gold: "0px 4px 20px rgba(255, 215, 0, 0.4)",
+        "gold-lg": "0px 8px 40px rgba(255, 215, 0, 0.6)",
         frost: "0px 6px 24px rgba(169, 214, 229, 0.2)",
+        electric: "0px 4px 20px rgba(0, 255, 136, 0.4), 0px 0px 40px rgba(0, 255, 136, 0.2)",
+      },
+      backgroundImage: {
+        // Vibrant Gradients
+        "hero-gradient": "linear-gradient(135deg, #FF0040 0%, #00FF88 50%, #FFD700 100%)",
+        "button-gradient": "linear-gradient(90deg, #FF0040 0%, #D2001F 100%)",
+        "text-gradient": "linear-gradient(90deg, #FF0040, #00FF88, #FFD700, #FF0040)",
+        "frost-gradient": "linear-gradient(180deg, #E0F7FF 0%, #A9D6E5 100%)",
+        "gold-gradient": "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,6 +111,25 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        // Enhanced Animations
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(255, 0, 64, 0.5)" },
+          "50%": { boxShadow: "0 0 40px rgba(255, 0, 64, 0.8), 0 0 60px rgba(255, 0, 64, 0.4)" },
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "rainbow": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
         "accordion-down": {
           from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -90,6 +140,10 @@ module.exports = {
         },
       },
       animation: {
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 3s ease infinite",
+        "rainbow": "rainbow 3s ease infinite",
+        "float": "float 3s ease-in-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
