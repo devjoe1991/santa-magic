@@ -4,30 +4,22 @@ export interface FreepikVideoGenerationRequest {
   image: string; // Base64 encoded image
   prompt: string;
   duration: 5 | 10; // Video duration in seconds
-  mode?: 'fast' | 'pro'; // Generation mode, default to 'pro'
-  aspect_ratio?: '16:9' | '9:16' | '1:1'; // Aspect ratio, auto-detect from image if not specified
   cfg_scale?: number; // Control creativity vs adherence (0.1-1.0), default 0.5
   negative_prompt?: string; // What to avoid in generation
   seed?: number; // For reproducible results
+  static_mask?: string; // Base64 mask defining motion areas
+  dynamic_masks?: Array<{
+    mask: string; // Base64 mask
+    trajectories: Array<{ x: number; y: number }>; // Motion paths
+  }>;
 }
 
 export interface FreepikVideoGenerationResponse {
-  id: string; // Job ID for polling
-  status: FreepikJobStatus;
-  created_at: string;
-  updated_at: string;
-  config: {
-    prompt: string;
-    duration: number;
-    mode: string;
-    aspect_ratio: string;
-    cfg_scale: number;
-    negative_prompt?: string;
-  };
-  result?: {
-    video_url: string;
-    preview_url?: string;
-    thumbnail_url?: string;
+  data: {
+    task_id: string; // Task ID for polling
+    status: 'CREATED' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+    generated?: string[]; // Array of video URLs when completed
+    error_message?: string; // Error message if failed
   };
   error?: {
     code: string;
@@ -90,7 +82,7 @@ export interface VideoGenerationOptions {
   imageUrl: string;
   imageBase64?: string; // If already converted
   prompt: string;
-  duration?: 5 | 10; // Default to 5 seconds
+  duration?: 5 | 10; // Default to 10 seconds
   enhancePrompt?: boolean; // Whether to add Christmas enhancements
   aspectRatio?: '16:9' | '9:16' | '1:1';
   cfgScale?: number;
@@ -132,12 +124,10 @@ export const DEFAULT_CHRISTMAS_ENHANCEMENTS: ChristmasPromptEnhancement = {
     'detailed rendering'
   ],
   christmasKeywords: [
-    'magical Christmas atmosphere',
-    'festive holiday spirit',
-    'warm Christmas glow',
-    'holiday magic',
-    'Christmas wonder',
-    'seasonal joy'
+    'Santa Claus',
+    'red Santa suit',
+    'Christmas magic',
+    'holiday spirit'
   ],
   motionKeywords: [
     'gentle movement',
@@ -147,42 +137,39 @@ export const DEFAULT_CHRISTMAS_ENHANCEMENTS: ChristmasPromptEnhancement = {
     'graceful gestures'
   ],
   lightingKeywords: [
-    'warm golden lighting',
-    'soft Christmas lights',
-    'magical sparkles',
-    'cozy illumination',
-    'festive glow'
+    'natural lighting',
+    'consistent lighting',
+    'original lighting'
   ],
   atmosphereKeywords: [
-    'enchanting atmosphere',
-    'dreamy ambiance',
-    'magical environment',
-    'Christmas spirit',
-    'holiday warmth'
+    'realistic atmosphere',
+    'original environment',
+    'unchanged setting'
   ],
   negativePrompts: [
-    'blurry',
-    'distorted',
-    'scary',
-    'horror',
-    'low quality',
-    'pixelated',
-    'choppy motion',
-    'unnatural movement',
-    'dark atmosphere',
-    'creepy',
     'camera movement',
-    'perspective change',
+    'camera moves',
     'scene change',
-    'different location',
-    'studio setting',
-    'indoor studio',
-    'green screen',
-    'artificial background',
-    'zoom in',
-    'zoom out',
-    'camera pan',
-    'camera tilt',
-    'changing environment'
+    'changing background',
+    'santa popup',
+    'santa overlay',
+    'teleporting',
+    'appearing instantly',
+    'waving at camera',
+    'looking at camera',
+    'acknowledging camera',
+    'posing for camera',
+    'shh gesture',
+    'interacting with camera',
+    'notices camera',
+    'realizes on camera',
+    'gesturing to camera',
+    'random person',
+    'unknown man',
+    'stranger',
+    'regular person',
+    'not santa',
+    'wrong character',
+    'different person'
   ]
 };

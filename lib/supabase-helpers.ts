@@ -63,7 +63,7 @@ export async function storeSceneAnalysis(
     const { data, error } = await supabaseAdmin
       .from('scene_analyses')
       .insert({
-        image_storage_path: imageStoragePath,
+        image_path: imageStoragePath,
         analysis_data: analysis,
         doors: analysis.doors,
         windows: analysis.windows,

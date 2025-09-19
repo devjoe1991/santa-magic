@@ -112,7 +112,7 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
       orderId,
       imageUrl,
       prompt: selectedPrompt.prompt_text,
-      duration: request.videoDuration || 5,
+      duration: request.videoDuration || 10,
       enhancePrompt: true,
       metadata: {
         analysisId,
@@ -196,16 +196,27 @@ async function updateOrderProcessingStatus(
 ): Promise<void> {
   try {
     const updateData: any = {
-      processing_status: status,
-      ...additionalData
+      processing_status: status
     };
+
+    // Map camelCase to snake_case for database columns
+    if (additionalData?.freepikJobId !== undefined) {
+      updateData.freepik_job_id = additionalData.freepikJobId;
+    }
+    if (additionalData?.freepikStatus !== undefined) {
+      updateData.freepik_status = additionalData.freepikStatus;
+    }
+    if (additionalData?.errorMessage !== undefined) {
+      updateData.error_message = additionalData.errorMessage;
+    }
+    if (additionalData?.retryCount !== undefined) {
+      updateData.retry_count = additionalData.retryCount;
+    }
 
     if (status === 'processing') {
       updateData.processing_started_at = new Date().toISOString();
     } else if (status === 'completed') {
       updateData.processing_completed_at = new Date().toISOString();
-    } else if (status === 'failed' && additionalData?.errorMessage) {
-      updateData.error_message = additionalData.errorMessage;
     }
 
     const { error } = await supabaseAdmin

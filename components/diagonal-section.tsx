@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface DiagonalSectionProps {
   children: ReactNode;
   className?: string;
   backgroundColor?: string;
   angle?: number;
-  direction?: 'left' | 'right';
+  direction?: "left" | "right";
   topDivider?: boolean;
   bottomDivider?: boolean;
   dividerColor?: string;
@@ -17,22 +17,25 @@ export default function DiagonalSection({
   className = "",
   backgroundColor = "bg-cream",
   angle = 2,
-  direction = 'right',
+  direction = "right",
   topDivider = false,
   bottomDivider = false,
-  dividerColor = "bg-white"
+  dividerColor = "bg-white",
 }: DiagonalSectionProps) {
-  const skewDirection = direction === 'left' ? `-${angle}deg` : `${angle}deg`;
+  const skewDirection = direction === "left" ? `-${angle}deg` : `${angle}deg`;
 
   return (
     <div className={cn("relative", className)}>
       {/* Top Diagonal Divider */}
       {topDivider && (
         <div
-          className={cn("absolute top-0 left-0 right-0 h-24 z-10", dividerColor)}
+          className={cn(
+            "absolute left-0 right-0 top-0 z-10 h-24",
+            dividerColor,
+          )}
           style={{
             transform: `skewY(${skewDirection})`,
-            transformOrigin: 'top left'
+            transformOrigin: "top left",
           }}
         />
       )}
@@ -42,14 +45,14 @@ export default function DiagonalSection({
         className={cn("relative z-0", backgroundColor)}
         style={{
           transform: `skewY(${skewDirection})`,
-          transformOrigin: 'top left'
+          transformOrigin: "top left",
         }}
       >
         {/* Content Container - Counter-skew to keep content straight */}
         <div
           style={{
-            transform: `skewY(${direction === 'left' ? `${angle}deg` : `-${angle}deg`})`,
-            transformOrigin: 'top left'
+            transform: `skewY(${direction === "left" ? `${angle}deg` : `-${angle}deg`})`,
+            transformOrigin: "top left",
           }}
           className="py-24"
         >
@@ -60,10 +63,13 @@ export default function DiagonalSection({
       {/* Bottom Diagonal Divider */}
       {bottomDivider && (
         <div
-          className={cn("absolute bottom-0 left-0 right-0 h-24 z-10", dividerColor)}
+          className={cn(
+            "absolute bottom-0 left-0 right-0 z-10 h-24",
+            dividerColor,
+          )}
           style={{
             transform: `skewY(${skewDirection})`,
-            transformOrigin: 'bottom left'
+            transformOrigin: "bottom left",
           }}
         />
       )}
@@ -72,7 +78,13 @@ export default function DiagonalSection({
 }
 
 // Preset diagonal sections for common use cases
-export function HeroDiagonalSection({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function HeroDiagonalSection({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <DiagonalSection
       backgroundColor="bg-gradient-to-br from-frostBlue/20 to-cream/50"
@@ -87,7 +99,13 @@ export function HeroDiagonalSection({ children, className = "" }: { children: Re
   );
 }
 
-export function FeatureDiagonalSection({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function FeatureDiagonalSection({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <DiagonalSection
       backgroundColor="bg-warmGold/10"
@@ -103,7 +121,13 @@ export function FeatureDiagonalSection({ children, className = "" }: { children:
   );
 }
 
-export function TestimonialDiagonalSection({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function TestimonialDiagonalSection({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <DiagonalSection
       backgroundColor="bg-evergreen/5"
