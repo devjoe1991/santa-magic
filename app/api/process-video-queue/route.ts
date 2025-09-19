@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       type: 'ai_generated',
       analysisId,
       promptId,
-      videoDuration: videoDuration || 5 // Default to 5 seconds
+      videoDuration: videoDuration || 10 // Default to 10 seconds
     });
 
     console.log(`Video processing initiated for order: ${orderId}`);
@@ -249,7 +249,7 @@ export async function PATCH(request: NextRequest) {
       type: 'ai_generated',
       analysisId: order.scene_analysis_id!,
       promptId: order.selected_prompt_id!,
-      videoDuration: order.video_duration || 5
+      videoDuration: (order.video_duration as 5 | 10) || 10
     });
 
     return NextResponse.json({

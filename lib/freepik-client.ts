@@ -56,10 +56,8 @@ export class FreepikClient {
       const request: FreepikVideoGenerationRequest = {
         image: imageBase64,
         prompt,
-        duration: options.duration || 5,
-        mode: 'pro', // Use pro mode for better quality
-        aspect_ratio: options.aspectRatio || '16:9',
-        cfg_scale: options.cfgScale || 0.5,
+        duration: options.duration || 10,
+        cfg_scale: options.cfgScale || 0.8,
         negative_prompt: DEFAULT_CHRISTMAS_ENHANCEMENTS.negativePrompts.join(', ')
       };
 
@@ -67,7 +65,7 @@ export class FreepikClient {
         orderId: options.orderId,
         promptLength: prompt.length,
         duration: request.duration,
-        mode: request.mode
+        cfgScale: request.cfg_scale
       });
 
       // Submit the generation request
@@ -111,17 +109,17 @@ export class FreepikClient {
     jobId?: string;
     error?: string;
   }> {
-    const url = `${this.baseUrl}/v1/ai/text-to-video/kling-v2-1-master`;
+    const url = `${this.baseUrl}/v1/ai/image-to-video/kling-v2-1-pro`;
 
     const requestBody = {
-      prompt: request.prompt,
       image: request.image,
-      duration: request.duration,
-      mode: request.mode,
-      aspect_ratio: request.aspect_ratio,
+      prompt: request.prompt,
+      duration: request.duration.toString(), // Convert to string as per API docs
       cfg_scale: request.cfg_scale,
       negative_prompt: request.negative_prompt,
-      ...(request.seed && { seed: request.seed })
+      ...(request.seed && { seed: request.seed }),
+      ...(request.static_mask && { static_mask: request.static_mask }),
+      ...(request.dynamic_masks && { dynamic_masks: request.dynamic_masks })
     };
 
     let lastError: Error | null = null;
@@ -155,20 +153,29 @@ export class FreepikClient {
           throw new Error(errorMessage);
         }
 
-        let data: FreepikVideoGenerationResponse;
+        let responseData: any;
         try {
-          data = JSON.parse(responseText);
+          responseData = JSON.parse(responseText);
         } catch {
           throw new Error('Invalid JSON response from Freepik API');
         }
 
-        if (data.error) {
-          throw new Error(data.error.message);
+        console.log('Freepik API response:', responseData);
+
+        // Handle error responses
+        if (responseData.error) {
+          throw new Error(responseData.error.message || 'API error occurred');
+        }
+
+        // Extract task_id from wrapped response
+        const taskId = responseData.data?.task_id || responseData.task_id;
+        if (!taskId) {
+          throw new Error('No task_id received from Freepik API');
         }
 
         return {
           success: true,
-          jobId: data.id
+          jobId: taskId
         };
 
       } catch (error) {
@@ -207,6 +214,7 @@ export class FreepikClient {
         switch (status.status) {
           case 'completed':
             if (status.result?.video_url) {
+              console.log(`Video generation completed successfully for job ${jobId}. Video URL: ${status.result.video_url}`);
               return {
                 success: true,
                 jobId,
@@ -214,6 +222,7 @@ export class FreepikClient {
                 thumbnailUrl: status.result.thumbnail_url
               };
             } else {
+              console.error(`Generation marked as completed but no video URL received for job ${jobId}`);
               return {
                 success: false,
                 jobId,
@@ -223,20 +232,23 @@ export class FreepikClient {
 
           case 'failed':
           case 'cancelled':
+            const errorMsg = status.error?.message || `Generation ${status.status}`;
+            console.error(`Video generation ${status.status} for job ${jobId}: ${errorMsg}`);
             return {
               success: false,
               jobId,
-              error: status.error?.message || `Generation ${status.status}`,
+              error: errorMsg,
               details: status.error?.details
             };
 
           case 'queued':
           case 'processing':
+            console.log(`Job ${jobId} still ${status.status}, continuing to poll...`);
             // Continue polling
             break;
 
           default:
-            console.warn(`Unknown status: ${status.status}`);
+            console.warn(`Unknown status for job ${jobId}: ${status.status}`);
         }
 
         // Wait before next poll
@@ -267,7 +279,7 @@ export class FreepikClient {
    * Check the status of a video generation job
    */
   async checkGenerationStatus(jobId: string): Promise<FreepikStatusResponse> {
-    const url = `${this.baseUrl}/v1/ai/text-to-video/kling-v2-1-master/${jobId}`;
+    const url = `${this.baseUrl}/v1/ai/image-to-video/kling-v2-1/${jobId}`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -283,8 +295,52 @@ export class FreepikClient {
       throw new Error(`Status check failed: ${response.status} ${errorText}`);
     }
 
-    const data: FreepikStatusResponse = await response.json();
-    return data;
+    const responseData = await response.json();
+    console.log(`Status check response for ${jobId}:`, responseData);
+
+    // Extract data from wrapped response
+    const data = responseData.data || responseData;
+
+    // Map API status to our expected format
+    const statusMap: Record<string, FreepikJobStatus> = {
+      'CREATED': 'queued',
+      'PROCESSING': 'processing',
+      'COMPLETED': 'completed',
+      'FAILED': 'failed',
+      'CANCELLED': 'cancelled'
+    };
+
+    const mappedStatus = statusMap[data.status] || data.status.toLowerCase();
+
+    // Build response in expected format
+    const result: FreepikStatusResponse = {
+      id: data.task_id || jobId,
+      status: mappedStatus,
+      created_at: '',
+      updated_at: ''
+    };
+
+    // Handle completed status with video URL
+    if (mappedStatus === 'completed' && data.generated && data.generated.length > 0) {
+      result.result = {
+        video_url: data.generated[0],
+        thumbnail_url: data.generated[0], // Use video URL as thumbnail for now
+        duration: 5,
+        resolution: { width: 1280, height: 720 },
+        format: 'mp4',
+        size_bytes: 0
+      };
+    }
+
+    // Handle error status
+    if (mappedStatus === 'failed') {
+      result.error = {
+        code: 'generation_failed',
+        message: data.error_message || 'Video generation failed'
+      };
+    }
+
+    return result;
   }
 
   /**
@@ -316,39 +372,18 @@ export class FreepikClient {
   }
 
   /**
-   * Enhance prompt with Christmas magic
+   * Enhance prompt using proven working formula
    */
   private enhancePromptForChristmas(originalPrompt: string): string {
-    const enhancements = DEFAULT_CHRISTMAS_ENHANCEMENTS;
-
-    // Build enhanced prompt with security camera context
-    const enhancedParts = [
-      // First, establish the security camera perspective
-      'Static security camera view,',
-      'Santa appears in the actual location,',
-      originalPrompt,
-      // Add camera and environment constraints
-      'maintain original background and environment,',
-      'preserve fixed camera perspective,',
-      'no camera movement or scene changes,',
-      // Add quality keywords
-      enhancements.qualityKeywords.slice(0, 2).join(', '),
-      // Add Christmas atmosphere
-      enhancements.christmasKeywords.slice(0, 2).join(', '),
-      // Add motion quality (focused on Santa's movement only)
-      enhancements.motionKeywords.slice(0, 2).join(', '),
-      // Add lighting
-      enhancements.lightingKeywords.slice(0, 2).join(', ')
-    ];
-
-    const enhanced = enhancedParts.join(', ');
+    // Use the exact structure that worked perfectly in manual testing
+    const enhancedPrompt = `Add Santa Claus ${originalPrompt}. Santa should be wearing his traditional red suit with white beard. The camera is static and should not move. Keep the colours subtle to make this look like real security camera footage.`;
 
     console.log('Enhanced prompt:', {
       original: originalPrompt.substring(0, 100) + '...',
-      enhanced: enhanced.substring(0, 200) + '...'
+      enhanced: enhancedPrompt.substring(0, 200) + '...'
     });
 
-    return enhanced;
+    return enhancedPrompt;
   }
 
   /**
@@ -399,8 +434,7 @@ export async function testFreepikConnection(): Promise<{
   error?: string;
 }> {
   try {
-    const client = createFreepikClient();
-
+    createFreepikClient();
     // We can't easily test the video endpoint without submitting a job
     // So we'll just validate the client creation
     return { success: true };

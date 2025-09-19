@@ -23,6 +23,7 @@ export interface LayoutInfo {
   description: string;
   lighting: 'bright' | 'dim' | 'dark';
   visibility: 'clear' | 'partially obscured' | 'poor';
+  sceneType: 'indoor' | 'outdoor' | 'unclear';
 }
 
 export interface SceneAnalysis {

@@ -1,0 +1,185 @@
+'use client';
+
+import { CheckCircle, Upload, CreditCard } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+interface ProcessStep {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  status: 'pending' | 'active' | 'completed';
+}
+
+interface SimpleProcessTrackerProps {
+  currentStep: 'upload' | 'payment';
+  hasFile: boolean;
+  isProcessing: boolean;
+}
+
+export default function SimpleProcessTracker({
+  currentStep,
+  hasFile,
+  isProcessing
+}: SimpleProcessTrackerProps) {
+  const steps: ProcessStep[] = [
+    {
+      id: 'upload',
+      title: 'Upload & Pay',
+      description: 'Upload your photo and complete payment',
+      icon: <Upload className="w-5 h-5" />,
+      status: hasFile ? (currentStep === 'payment' ? 'completed' : 'active') : 'active'
+    },
+    {
+      id: 'receive',
+      title: 'Receive Video',
+      description: 'Get your magical Santa video by email',
+      icon: <CreditCard className="w-5 h-5" />,
+      status: currentStep === 'payment' && hasFile ? 'active' : 'pending'
+    }
+  ];
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
+        <Card className="h-full bg-gradient-to-b from-cream via-frostBlue/5 to-cream border-2 border-warmGold/20 shadow-frost">
+          <CardContent className="p-6">
+            <div className="mb-8">
+              <h3 className="font-heading font-bold text-2xl text-christmasRed mb-2 flex items-center">
+                <span className="text-3xl mr-2">🎅</span>
+                Your Journey
+              </h3>
+              <p className="text-charcoal/60 font-body text-sm">
+                Follow along as we create your magical Santa video
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {steps.map((step, index) => (
+                <div key={step.id} className="relative">
+                  {/* Connection Line */}
+                  {index < steps.length - 1 && (
+                    <div className={cn(
+                      "absolute left-6 top-12 w-0.5 h-16 transition-colors duration-500",
+                      step.status === 'completed' ? 'bg-evergreen' : 'bg-coolGray/20'
+                    )} />
+                  )}
+
+                  <div className="flex items-start space-x-4">
+                    {/* Step Icon */}
+                    <div className={cn(
+                      "relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300",
+                      step.status === 'completed'
+                        ? 'bg-evergreen border-evergreen text-white shadow-glow'
+                        : step.status === 'active'
+                        ? 'bg-christmasRed border-christmasRed text-white shadow-glow'
+                        : 'bg-snowWhite border-coolGray/30 text-coolGray/60'
+                    )}>
+                      {step.status === 'completed' ? (
+                        <CheckCircle className="w-6 h-6" />
+                      ) : (
+                        step.icon
+                      )}
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="flex-1 min-w-0">
+                      <h4 className={cn(
+                        "font-heading font-semibold transition-colors",
+                        step.status === 'completed'
+                          ? 'text-evergreen'
+                          : step.status === 'active'
+                          ? 'text-christmasRed'
+                          : 'text-coolGray/60'
+                      )}>
+                        {step.title}
+                      </h4>
+                      <p className={cn(
+                        "text-xs font-body mt-1 transition-colors",
+                        step.status === 'completed' || step.status === 'active'
+                          ? 'text-charcoal/70'
+                          : 'text-coolGray/50'
+                      )}>
+                        {step.description}
+                      </p>
+
+                      {/* Progress Indicators */}
+                      {step.id === 'upload' && isProcessing && (
+                        <div className="mt-2 text-xs text-christmasRed font-body flex items-center">
+                          <div className="animate-spin rounded-full h-3 w-3 border border-christmasRed border-t-transparent mr-2"></div>
+                          Processing payment...
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Festive Footer */}
+            <div className="mt-8 p-4 bg-warmGold/10 rounded-lg border border-warmGold/20">
+              <div className="text-center">
+                <div className="text-2xl mb-2">🎄</div>
+                <p className="text-xs font-body text-charcoal/60">
+                  Creating Christmas magic with AI
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mobile Progress Bar */}
+      <div className="lg:hidden mb-6">
+        <Card className="bg-cream border-2 border-warmGold/20">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-heading font-bold text-lg text-christmasRed">
+                Progress
+              </h3>
+              <span className="text-sm font-body text-charcoal/60">
+                Step {steps.findIndex(s => s.status === 'active') + 1} of {steps.length}
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center flex-shrink-0">
+                  <div className={cn(
+                    "flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-300",
+                    step.status === 'completed'
+                      ? 'bg-evergreen border-evergreen text-white'
+                      : step.status === 'active'
+                      ? 'bg-christmasRed border-christmasRed text-white'
+                      : 'bg-snowWhite border-coolGray/30 text-coolGray/60'
+                  )}>
+                    {step.status === 'completed' ? (
+                      <CheckCircle className="w-4 h-4" />
+                    ) : (
+                      <span className="text-xs font-bold">{index + 1}</span>
+                    )}
+                  </div>
+
+                  {index < steps.length - 1 && (
+                    <div className={cn(
+                      "w-8 h-0.5 mx-2 transition-colors duration-300",
+                      step.status === 'completed' ? 'bg-evergreen' : 'bg-coolGray/20'
+                    )} />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-3">
+              <p className="text-sm font-body text-charcoal/70">
+                {steps.find(s => s.status === 'active')?.description || 'Ready to begin!'}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
+}

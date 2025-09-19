@@ -17,9 +17,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        // 🎅 Enhanced Christmas Theme Colors - Bold & Vibrant
-        christmasRed: "#FF0040",
-        electricGreen: "#00FF88",
+        // 🎅 Traditional Christmas Theme Colors
+        christmasRed: "#C1272D",
+        traditionalGreen: "#1B4D3E",
         berryRed: "#D2001F",
         evergreen: "#1B4D3E",
         snowWhite: "#FFFFFF",
@@ -38,7 +38,7 @@ module.exports = {
         special: "hsl(var(--special))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#FF0040", // Vibrant Christmas Red
+          DEFAULT: "#C1272D", // Traditional Christmas Red
           foreground: "#FFFFFF",
         },
         secondary: {
@@ -70,7 +70,7 @@ module.exports = {
         display: ["var(--font-bebas)", "Impact", "Arial Black", "sans-serif"],
         heading: ["var(--font-montserrat)", "system-ui", "sans-serif"],
         body: ["var(--font-poppins)", "system-ui", "sans-serif"],
-        festive: ["var(--font-mountains)", "serif"],
+        festive: ["var(--font-playfair)", "serif"],
       },
       fontSize: {
         // Massive Typography Scale
@@ -88,20 +88,20 @@ module.exports = {
         'button': ['1.125rem', { lineHeight: '1.5', fontWeight: '600' }], // 18px
       },
       boxShadow: {
-        // Enhanced Glow Effects
-        glow: "0px 4px 20px rgba(255, 0, 64, 0.4), 0px 0px 40px rgba(255, 0, 64, 0.2)",
-        "glow-lg": "0px 8px 40px rgba(255, 0, 64, 0.6), 0px 0px 60px rgba(255, 0, 64, 0.3)",
-        "glow-pulse": "0px 0px 20px rgba(255, 0, 64, 0.5), 0px 0px 40px rgba(255, 0, 64, 0.3), 0px 0px 60px rgba(255, 0, 64, 0.1)",
+        // Subtle Glow Effects
+        glow: "0px 4px 15px rgba(193, 39, 45, 0.2), 0px 0px 25px rgba(193, 39, 45, 0.1)",
+        "glow-lg": "0px 8px 25px rgba(193, 39, 45, 0.3), 0px 0px 35px rgba(193, 39, 45, 0.15)",
+        "glow-pulse": "0px 0px 15px rgba(193, 39, 45, 0.3), 0px 0px 25px rgba(193, 39, 45, 0.2), 0px 0px 35px rgba(193, 39, 45, 0.1)",
         gold: "0px 4px 20px rgba(255, 215, 0, 0.4)",
         "gold-lg": "0px 8px 40px rgba(255, 215, 0, 0.6)",
         frost: "0px 6px 24px rgba(169, 214, 229, 0.2)",
         electric: "0px 4px 20px rgba(0, 255, 136, 0.4), 0px 0px 40px rgba(0, 255, 136, 0.2)",
       },
       backgroundImage: {
-        // Vibrant Gradients
-        "hero-gradient": "linear-gradient(135deg, #FF0040 0%, #00FF88 50%, #FFD700 100%)",
-        "button-gradient": "linear-gradient(90deg, #FF0040 0%, #D2001F 100%)",
-        "text-gradient": "linear-gradient(90deg, #FF0040, #00FF88, #FFD700, #FF0040)",
+        // Traditional Gradients
+        "hero-gradient": "linear-gradient(135deg, #C1272D 0%, #1B4D3E 50%, #FFD700 100%)",
+        "button-gradient": "linear-gradient(90deg, #C1272D 0%, #D2001F 100%)",
+        "text-gradient": "linear-gradient(90deg, #C1272D, #1B4D3E, #FFD700, #C1272D)",
         "frost-gradient": "linear-gradient(180deg, #E0F7FF 0%, #A9D6E5 100%)",
         "gold-gradient": "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
       },
@@ -113,8 +113,8 @@ module.exports = {
       keyframes: {
         // Enhanced Animations
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(255, 0, 64, 0.5)" },
-          "50%": { boxShadow: "0 0 40px rgba(255, 0, 64, 0.8), 0 0 60px rgba(255, 0, 64, 0.4)" },
+          "0%, 100%": { boxShadow: "0 0 10px rgba(193, 39, 45, 0.3)" },
+          "50%": { boxShadow: "0 0 20px rgba(193, 39, 45, 0.5), 0 0 30px rgba(193, 39, 45, 0.2)" },
         },
         "gradient-shift": {
           "0%": { backgroundPosition: "0% 50%" },

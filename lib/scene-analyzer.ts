@@ -10,7 +10,7 @@ export async function analyzeScene(base64Image: string): Promise<SceneAnalysis> 
         content: [
           {
             type: "text",
-            text: `Analyze this doorbell camera image for creating a Santa Claus video. I need detailed information about the scene to determine the best way to add Santa delivering a present.
+            text: `Analyze this camera image for creating a Santa Claus video. I need detailed information about the scene to determine optimal Santa positioning that's clearly visible but naturally placed, not center-stage.
 
 Please analyze and return ONLY a valid JSON object with this exact structure:
 
@@ -42,13 +42,31 @@ Please analyze and return ONLY a valid JSON object with this exact structure:
     "entryType": "covered porch/open doorway/apartment/etc",
     "description": "brief description of the space",
     "lighting": "bright/dim/dark",
-    "visibility": "clear/partially obscured/poor"
+    "visibility": "clear/partially obscured/poor",
+    "sceneType": "indoor/outdoor/unclear"
   },
   "suitabilityScore": 85,
-  "recommendations": ["suggestion 1", "suggestion 2"]
+  "recommendations": ["suggestion 1", "suggestion 2"],
+  "santaZones": {
+    "primaryZone": "area description for main Santa positioning",
+    "secondaryZone": "backup area for Santa placement",
+    "approachPath": "natural entry route description",
+    "exitPath": "natural departure route description",
+    "visibility": "excellent/good/fair",
+    "optimalDistance": "close/medium/far"
+  }
 }
 
-Focus on elements that would affect Santa placement and movement in the scene.`
+Focus on identifying optimal zones for Santa positioning:
+- Where Santa should appear to be clearly visible but natural
+- Natural approach/exit paths (left side, right side, along walls)
+- Areas to avoid (direct center, too close, too far)
+- Best positioning for a £5 video that excites children while feeling authentic
+
+IMPORTANT: Determine sceneType:
+- "indoor": Christmas tree visible, living room furniture, hallway, stairs, interior walls, ceiling lights
+- "outdoor": sky visible, cars, driveways, garden, exterior walls, street lighting, doorbell camera view
+- "unclear": ambiguous scenes that could be either`
           },
           {
             type: "image_url",
@@ -96,7 +114,8 @@ Focus on elements that would affect Santa placement and movement in the scene.`
         entryType: 'doorway',
         description: 'Unable to analyze scene details',
         lighting: 'dim',
-        visibility: 'poor'
+        visibility: 'poor',
+        sceneType: 'unclear'
       },
       suitabilityScore: 50,
       recommendations: ['Analysis failed - manual review recommended']

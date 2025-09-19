@@ -5,6 +5,7 @@ import {
   PromptGeneratorConfig,
   PromptGenerationResult
 } from '@/types/video-prompts';
+import { randomUUID } from 'crypto';
 
 // Default configuration
 const DEFAULT_CONFIG: PromptGeneratorConfig = {
@@ -15,128 +16,149 @@ const DEFAULT_CONFIG: PromptGeneratorConfig = {
   emphasizeChristmas: true,
 };
 
-// Prompt templates focused on "catching Santa sneaking around"
-const PROMPT_TEMPLATES: PromptTemplate[] = [
-  // Caught red-handed scenarios
+// Prompt templates focused on Santa SNEAKING - matching proven working prompt
+// Outdoor prompts - Santa leaving after chimney delivery
+const OUTDOOR_PROMPT_TEMPLATES: PromptTemplate[] = [
+  // Santa departing after delivery - the main scenario
   {
-    id: 'santa-caught-red-handed',
-    category: 'interactive',
-    baseDescription: 'Santa caught mid-action, freezing with a guilty expression',
+    id: 'santa-post-delivery-departure',
+    category: 'departure',
+    baseDescription: 'Santa leaving after delivering presents via chimney',
     requiredElements: [],
-    optionalElements: ['doors', 'furniture', 'decorations'],
+    optionalElements: [],
+    confidence: 98,
+    variations: [
+      'sneaking away from this location after delivering presents inside, moving left',
+      'quietly departing after coming down the chimney, tiptoeing to the right',
+      'leaving this area stealthily with lighter gift bag after his delivery',
+      'creeping away after his visit, mission accomplished'
+    ]
+  },
+  // Santa moving away stealthily
+  {
+    id: 'santa-stealthy-departure',
+    category: 'departure',
+    baseDescription: 'Santa moving stealthily away after delivery',
+    requiredElements: [],
+    optionalElements: [],
     confidence: 95,
     variations: [
-      'Santa freezing in place with wide eyes and a sheepish grin when caught {locationDetails}',
-      'Santa with hands up and a guilty smile, caught red-handed while sneaking {locationDetails}',
-      'Santa pausing mid-step with a finger to his lips saying "Shhh!" when spotted {locationDetails}',
-      'Santa looking over his shoulder with surprise, caught in the act {locationDetails}'
+      'tiptoeing away from this location to the left, moving slowly and quietly',
+      'creeping away from this area to the right, staying low and cautious',
+      'moving stealthily away from this location, pausing to listen for sounds',
+      'sneaking away from this area slowly, checking no one sees him'
     ]
   },
-  // Sneaking and tiptoeing
+  // Sneaking away after delivery
   {
-    id: 'santa-tiptoeing-stealth',
-    category: 'entrance',
-    baseDescription: 'Santa carefully tiptoeing trying not to wake anyone',
+    id: 'santa-sneaking-departure',
+    category: 'departure',
+    baseDescription: 'Santa sneaking away from the property',
     requiredElements: [],
-    optionalElements: ['doors', 'furniture', 'plants'],
+    optionalElements: [],
+    confidence: 85,
+    variations: [
+      'sneaking away from this location after delivering presents, tiptoeing to the left',
+      'quietly leaving this area after his delivery, trying not to wake anyone',
+      'sneaking away from this location to the right after leaving gifts',
+      'tiptoeing away from this area, mission accomplished'
+    ]
+  },
+  // Santa finishing his visit
+  {
+    id: 'santa-finishing-visit',
+    category: 'departure',
+    baseDescription: 'Santa completing his visit and departing',
+    requiredElements: [],
+    optionalElements: [],
+    confidence: 93,
+    variations: [
+      'quietly finishing his delivery and sneaking away from this location',
+      'departing after leaving gifts inside, moving carefully away',
+      'tiptoeing away with satisfied smile after successful delivery',
+      'carefully leaving this area after completing his Christmas mission'
+    ]
+  },
+  // Stealthy departure movement
+  {
+    id: 'santa-stealthy-exit',
+    category: 'departure',
+    baseDescription: 'Santa moving stealthily away from this location',
+    requiredElements: [],
+    optionalElements: [],
     confidence: 90,
     variations: [
-      'Santa tiptoeing on his toes with exaggerated stealth, trying not to make a sound {locationDetails}',
-      'Santa creeping slowly with arms out for balance as he sneaks past the {door}',
-      'Santa moving in slow motion with cartoonish stealth around {locationDetails}',
-      'Santa hunched over, carefully placing each step while sneaking through the entrance'
+      'tiptoeing carefully away from this location, trying not to make any sound',
+      'moving stealthily away from this area, checking no one sees him',
+      'sneaking away from this location with careful, quiet steps',
+      'creeping away from this area slowly, pausing every few steps to listen'
     ]
   },
-  // Quick escape scenarios
+  // Natural departure movements
   {
-    id: 'santa-quick-escape',
+    id: 'santa-natural-departure',
     category: 'departure',
-    baseDescription: 'Santa quickly trying to escape after being spotted',
+    baseDescription: 'Santa departing naturally after his visit',
     requiredElements: [],
-    optionalElements: ['doors', 'windows', 'furniture'],
-    confidence: 85,
-    variations: [
-      'Santa making a comical quick dash toward the {door} after being caught',
-      'Santa doing an exaggerated tiptoe run, trying to escape unnoticed {locationDetails}',
-      'Santa ducking and weaving as he makes a sneaky exit past {locationDetails}',
-      'Santa with a playful panic, scrambling to hide behind {hidingSpot}'
-    ]
-  },
-  // Peeking and hiding
-  {
-    id: 'santa-peeking-around',
-    category: 'magical',
-    baseDescription: 'Santa cautiously peeking around corners or objects',
-    requiredElements: [],
-    optionalElements: ['doors', 'furniture', 'plants', 'decorations'],
+    optionalElements: [],
     confidence: 88,
     variations: [
-      'Santa peeking his head around the corner with only his eyes and hat visible',
-      'Santa carefully leaning out from behind {hidingSpot} to check if the coast is clear',
-      'Santa\'s hat and beard barely visible as he spies from behind the {door}',
-      'Santa doing a classic cartoon peek around {locationDetails} with one eye showing'
-    ]
-  },
-  // Surprised/startled reactions
-  {
-    id: 'santa-startled-reaction',
-    category: 'interactive',
-    baseDescription: 'Santa\'s shocked expression when he realizes he\'s been discovered',
-    requiredElements: [],
-    optionalElements: ['doors', 'decorations', 'furniture'],
-    confidence: 92,
-    variations: [
-      'Santa with comically wide eyes and dropped jaw, completely startled {locationDetails}',
-      'Santa doing a double-take with surprise, not expecting to be caught sneaking around',
-      'Santa with raised eyebrows and a "Who, me?" expression when spotted {locationDetails}',
-      'Santa looking genuinely shocked but then breaking into a warm smile when discovered'
-    ]
-  },
-  // Attempting to blend in/hide
-  {
-    id: 'santa-trying-to-hide',
-    category: 'interactive',
-    baseDescription: 'Santa attempting to hide or blend in unsuccessfully',
-    requiredElements: [],
-    optionalElements: ['furniture', 'plants', 'decorations'],
-    confidence: 80,
-    variations: [
-      'Santa trying to hide behind {hidingSpot} but his big belly gives him away',
-      'Santa attempting to blend in with {decorationDetails} by standing perfectly still',
-      'Santa ducking behind {hidingSpot} with just his boots and hat visible',
-      'Santa in a playful game of hide-and-seek, poorly concealed {locationDetails}'
-    ]
-  },
-  // Single present delivery (reduced from 3 templates)
-  {
-    id: 'santa-single-gift-drop',
-    category: 'delivery',
-    baseDescription: 'Santa quietly placing one special gift',
-    requiredElements: [],
-    optionalElements: ['doors', 'furniture', 'decorations'],
-    confidence: 75,
-    variations: [
-      'Santa gently setting down a single wrapped present {locationDetails} with care',
-      'Santa placing one magical gift while trying not to disturb anything {locationDetails}',
-      'Santa quietly leaving one special surprise {locationDetails} before sneaking away'
-    ]
-  },
-  // Window scenarios
-  {
-    id: 'santa-window-surveillance',
-    category: 'magical',
-    baseDescription: 'Santa checking through windows to see if anyone is watching',
-    requiredElements: ['windows'],
-    optionalElements: ['doors'],
-    confidence: 85,
-    variations: [
-      'Santa peering through the {window} to make sure no one is awake',
-      'Santa\'s face appearing at the {window} with a mischievous expression',
-      'Santa checking the {window} before making his sneaky entrance through the {door}',
-      'Santa waving playfully from the {window} after being spotted inside'
+      'tiptoeing quietly away from this location, moving carefully and naturally',
+      'moving carefully away from this area with nearly empty gift bag',
+      'pausing mid-departure to adjust his hat, then continuing away from this location',
+      'walking away from this area with careful steps, glancing back satisfied'
     ]
   }
 ];
+
+// Indoor prompts - Santa in the act of delivering
+const INDOOR_PROMPT_TEMPLATES: PromptTemplate[] = [
+  {
+    id: 'santa-christmas-tree-delivery',
+    category: 'delivery',
+    baseDescription: 'Santa placing presents under Christmas tree',
+    requiredElements: ['decorations'],
+    optionalElements: ['lights'],
+    confidence: 98,
+    variations: [
+      'quietly placing presents under the Christmas tree while everyone sleeps',
+      'carefully arranging gifts under the tree, trying not to make noise',
+      'tiptoeing to the Christmas tree with his gift bag',
+      'gently setting down presents beneath the tree'
+    ]
+  },
+  {
+    id: 'santa-indoor-sneaking',
+    category: 'delivery',
+    baseDescription: 'Santa moving stealthily through indoor space',
+    requiredElements: [],
+    optionalElements: [],
+    confidence: 90,
+    variations: [
+      'tiptoeing through the living room with his gift bag',
+      'sneaking carefully through the hallway, trying not to wake anyone',
+      'moving quietly through this room while carrying presents',
+      'creeping through the space with careful steps'
+    ]
+  },
+  {
+    id: 'santa-indoor-delivery',
+    category: 'delivery',
+    baseDescription: 'Santa delivering presents indoors',
+    requiredElements: [],
+    optionalElements: [],
+    confidence: 95,
+    variations: [
+      'quietly arranging presents while the family sleeps',
+      'carefully placing gifts in this room, being extra quiet',
+      'tiptoeing around to deliver presents without waking anyone',
+      'stealthily setting down his gift bag to arrange presents'
+    ]
+  }
+];
+
+// Combine templates based on scene type
+const PROMPT_TEMPLATES: PromptTemplate[] = [...OUTDOOR_PROMPT_TEMPLATES, ...INDOOR_PROMPT_TEMPLATES];
 
 // Generate contextual details based on scene elements
 function generateLocationDetails(analysis: SceneAnalysis): string {
@@ -192,18 +214,9 @@ function generateHidingSpot(analysis: SceneAnalysis): string {
 }
 
 function interpolateTemplate(template: string, analysis: SceneAnalysis): string {
-  let result = template;
-
-  // Replace placeholders with actual scene details
-  result = result.replace('{door}', analysis.doors.length > 0 ? analysis.doors[0].type : 'entrance');
-  result = result.replace('{window}', analysis.windows.length > 0 ?
-    `${analysis.windows[0].position} window` : 'window');
-  result = result.replace('{locationDetails}', generateLocationDetails(analysis));
-  result = result.replace('{decorationDetails}', generateDecorationDetails(analysis));
-  result = result.replace('{hidingSpot}', generateHidingSpot(analysis));
-
+  // No more object interpolation - use template as-is to prevent object creation
   // Add security camera context to every prompt
-  result = `From your security camera perspective: ${result}`;
+  const result = `From your security camera perspective: ${template}`;
 
   return result;
 }
@@ -285,7 +298,7 @@ function getSceneComplexity(analysis: SceneAnalysis): 'minimal' | 'moderate' | '
 }
 
 function generatePromptId(): string {
-  return `prompt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return randomUUID();
 }
 
 function extractUsedElements(template: PromptTemplate, analysis: SceneAnalysis): string[] {
@@ -314,8 +327,24 @@ export function generateVideoPrompts(
 ): PromptGenerationResult {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
 
+  // Select templates based on scene type
+  let selectedTemplates: PromptTemplate[];
+  switch (analysis.layout.sceneType) {
+    case 'indoor':
+      selectedTemplates = INDOOR_PROMPT_TEMPLATES;
+      break;
+    case 'outdoor':
+      selectedTemplates = OUTDOOR_PROMPT_TEMPLATES;
+      break;
+    case 'unclear':
+    default:
+      // Use all templates if unclear, with preference for outdoor
+      selectedTemplates = [...OUTDOOR_PROMPT_TEMPLATES, ...INDOOR_PROMPT_TEMPLATES];
+      break;
+  }
+
   // Score and filter templates
-  const scoredTemplates = PROMPT_TEMPLATES
+  const scoredTemplates = selectedTemplates
     .map(template => ({
       template,
       score: calculateTemplateScore(template, analysis),

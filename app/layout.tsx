@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Montserrat, Poppins, Mountains_of_Christmas } from "next/font/google";
+import { Bebas_Neue, Montserrat, Poppins, Playfair_Display } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import "./globals.css";
@@ -19,15 +19,15 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins"
 });
-const mountains = Mountains_of_Christmas({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-mountains"
+  weight: ["400", "700"],
+  variable: "--font-playfair"
 });
 
 export const metadata: Metadata = {
   title: "Seasonal Santa | Santa Doorbell Magic",
-  description: "Transform your doorbell footage into magical Santa Claus videos. Upload, pay £12.50, and receive your personalized Christmas video within minutes!",
+  description: "Transform your security camera photo into magical Santa Claus videos. Upload, pay £12.50, and receive your personalized Christmas video within minutes!",
 };
 
 export default function RootLayout({
@@ -43,7 +43,7 @@ export default function RootLayout({
           bebasNeue.variable,
           montserrat.variable,
           poppins.variable,
-          mountains.variable,
+          playfair.variable,
         )}
       >
         {children}

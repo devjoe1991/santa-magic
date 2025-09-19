@@ -173,7 +173,7 @@ function generateVideoReadyTemplate(data: EmailNotificationData): EmailTemplate 
             text-align: center;
         }
         .header h1 {
-            font-family: 'Mountains of Christmas', cursive;
+            font-family: 'Playfair Display', serif;
             font-size: 28px;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -357,7 +357,7 @@ function generateVideoFailureTemplate(data: EmailNotificationData): EmailTemplat
             text-align: center;
         }
         .header h1 {
-            font-family: 'Mountains of Christmas', cursive;
+            font-family: 'Playfair Display', serif;
             font-size: 24px;
             margin: 0;
         }
