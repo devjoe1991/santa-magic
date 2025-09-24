@@ -170,7 +170,7 @@ export default function Home() {
                   </h3>
                   <p className="font-body text-sm text-charcoal/70 sm:text-base">
                     Simply share your doorbell video and
-                    our AI analyses the perfect scene for Santa's arrival
+                    our AI analyses the perfect scene for Santa&apos;s arrival
                   </p>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function Home() {
                 <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
                 <span className="mr-2 text-base sm:mr-3 sm:text-lg lg:text-xl">🎅</span>
                 <span className="relative z-10 whitespace-nowrap">
-                  See Santa Today - It's Brilliant!
+                  See Santa Today - It&apos;s Brilliant!
                 </span>
               </Link>
             </div>

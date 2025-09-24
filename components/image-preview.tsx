@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
+import Image from 'next/image';
 
 interface ImagePreviewProps {
   file: File;
@@ -37,10 +38,13 @@ export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
       {/* Image preview */}
       <div className="flex flex-col items-center space-y-4">
         <div className="relative w-full max-w-md">
-          <img
+          <Image
             src={imageUrl}
             alt="Uploaded doorbell photo"
+            width={400}
+            height={256}
             className="w-full h-auto max-h-64 object-contain rounded-lg border-2 border-warmGold/30 shadow-gold"
+            unoptimized
           />
         </div>
 

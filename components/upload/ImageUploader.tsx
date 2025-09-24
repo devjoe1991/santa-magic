@@ -174,7 +174,7 @@ export default function ImageUploader({
               Knock, knock!
             </h2>
             <p className="font-body text-base text-christmasRed font-semibold sm:text-lg">
-              Who's there?
+              Who&apos;s there?
             </p>
             <p className="font-body text-base text-warmGold font-bold sm:text-lg">
               Santa Claus!

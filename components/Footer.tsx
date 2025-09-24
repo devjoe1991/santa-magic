@@ -50,7 +50,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-snowWhite/80 font-body text-lg leading-relaxed mb-6">
-              Bring the magic of Christmas to your doorstep with personalised Santa videos powered by cutting-edge AI technology. It's absolutely brilliant!
+              Bring the magic of Christmas to your doorstep with personalised Santa videos powered by cutting-edge AI technology. It&apos;s absolutely brilliant!
             </p>
 
             {/* Trust Badges */}
