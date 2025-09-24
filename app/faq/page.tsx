@@ -80,7 +80,7 @@ export default function FAQ() {
             </div>
             <p className="text-lg text-charcoal/70 font-body max-w-3xl mx-auto">
               Everything you need to know about creating your magical Santa video. 
-              Can't find what you're looking for? We've got you covered!
+              Can&apos;t find what you&apos;re looking for? We&apos;ve got you covered!
             </p>
           </div>
 
@@ -133,7 +133,7 @@ export default function FAQ() {
                   Ready to create your Christmas magic?
                 </CardTitle>
                 <CardDescription className="font-body text-lg text-charcoal/70">
-                  Everything you need to know is right here - let's make your Christmas absolutely brilliant!
+                  Everything you need to know is right here - let&apos;s make your Christmas absolutely brilliant!
                 </CardDescription>
               </CardHeader>
               <CardContent>

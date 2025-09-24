@@ -28,6 +28,11 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Seasonal Santa | Santa Doorbell Magic",
   description: "Transform your security camera photo into magical Santa Claus videos. Upload, pay £12.50, and receive your personalized Christmas video within minutes!",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
