@@ -180,7 +180,7 @@ export default function Home() {
                   <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-warmGold text-xl text-charcoal shadow-gold sm:mb-6 sm:h-16 sm:w-16 sm:text-2xl">
                     💳
                   </div>
-                  <span className="mb-3 inline-block rounded-full bg-warmGold/10 px-3 py-1 font-body text-xs font-bold text-warmGold sm:mb-4 sm:text-sm">
+                  <span className="mb-3 inline-block rounded-full bg-warmGold px-3 py-1 font-body text-xs font-bold text-white sm:mb-4 sm:text-sm">
                     Step 2
                   </span>
                   <h3 className="mb-2 font-heading text-lg font-bold text-charcoal sm:mb-3 sm:text-xl">
