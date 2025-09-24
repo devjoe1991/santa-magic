@@ -245,34 +245,30 @@ export default function UploadPage() {
       <Navbar />
       <SubtleSnow density="light" />
 
-      <div className="pb-16 pt-24">
+      <div className="pb-8 pt-16 sm:pb-12 sm:pt-20">
         <MaxWidthWrapper>
-          {/* Enhanced Header */}
-          <div className="mb-16 text-center">
-            <div className="mb-6 inline-flex items-center rounded-full bg-christmasRed/10 px-6 py-3 font-body font-bold text-christmasRed shadow-glow">
-              <span className="mr-2 text-xl">🎬</span>
+          {/* Ultra-Compact Header */}
+          <div className="mb-6 text-center sm:mb-8">
+            <div className="mb-4 inline-flex items-center rounded-full bg-christmasRed/10 px-4 py-2 font-body text-sm font-bold text-christmasRed shadow-glow sm:px-6 sm:py-3 sm:text-base">
+              <span className="mr-2 text-lg sm:text-xl">🎬</span>
               Create Your Santa Magic
             </div>
 
-            <h1 className="animate-fade-up mb-6 font-heading text-title-sm font-bold text-charcoal md:text-title">
+            <h1 className="animate-fade-up mb-3 font-heading text-2xl font-bold text-charcoal sm:text-3xl md:text-4xl">
               Upload Your{" "}
               <span className="text-gradient text-glow">Camera Photo</span>
             </h1>
-            <p className="animate-fade-up-delay-1 mx-auto max-w-3xl font-body text-body-lg text-charcoal/70">
-              Upload a photo from any security camera and we&apos;ll
-              transform it into a magical Santa video for just{" "}
-              <br />Works with doorbell, security, and indoor cameras.{" "}
-              <span className="text-glow-gold font-bold text-warmGold">
-                £12.50
-              </span>
+            <p className="animate-fade-up-delay-1 mx-auto max-w-xl font-body text-sm text-charcoal/70 sm:text-base">
+              Transform your doorbell footage into magical Santa video for just{" "}
+              <span className="text-glow-gold font-bold text-warmGold">£12.50</span>
             </p>
           </div>
 
-          {/* Main Content Area with 80/20 Split */}
-          <div className="flex flex-col gap-8 lg:flex-row">
-            {/* LEFT SIDE - 80% - Main Content */}
-            <div className="lg:w-4/5">
-              <div className="space-y-8">
+          {/* Main Content Area - Optimized Layout */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+            {/* LEFT SIDE - Main Content */}
+            <div className="flex-1 lg:w-3/4">
+              <div className="space-y-6">
                 {!showPaymentFlow ? (
                   <ImageUploader
                     file={file}
@@ -293,8 +289,8 @@ export default function UploadPage() {
               </div>
             </div>
 
-            {/* RIGHT SIDE - 20% - Process Tracker */}
-            <div className="lg:w-1/5">
+            {/* RIGHT SIDE - Process Tracker */}
+            <div className="lg:w-1/4">
               <SimpleProcessTracker
                 currentStep={showPaymentFlow ? "payment" : "upload"}
                 hasFile={!!file}

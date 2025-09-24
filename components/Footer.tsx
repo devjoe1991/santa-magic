@@ -31,8 +31,9 @@ export default function Footer() {
       {/* Subtle Snow Animation */}
       <SubtleSnow density="light" />
 
-      {/* Content */}
+      {/* Content with Modern Glass Effect */}
       <div className="relative z-10 mx-auto w-full max-w-screen-xl p-6 md:py-16 text-snowWhite">
+        <div className="glass-modern rounded-3xl p-8 md:p-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}
@@ -49,7 +50,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-snowWhite/80 font-body text-lg leading-relaxed mb-6">
-              Bring the magic of Christmas to your doorstep with personalized Santa videos powered by cutting-edge AI technology.
+              Bring the magic of Christmas to your doorstep with personalised Santa videos powered by cutting-edge AI technology. It's absolutely brilliant!
             </p>
 
             {/* Trust Badges */}
@@ -85,14 +86,10 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact & Info */}
+          {/* Service Info */}
           <div>
-            <h3 className="text-xl font-heading font-bold text-snowWhite mb-6 text-glow">Contact</h3>
+            <h3 className="text-xl font-heading font-bold text-snowWhite mb-6 text-glow">Service Info</h3>
             <ul className="space-y-3">
-              <li className="flex items-center space-x-2">
-                <span className="text-warmGold">📧</span>
-                <span className="text-snowWhite/80 font-body">support@seasonalsanta.co.uk</span>
-              </li>
               <li className="flex items-center space-x-2">
                 <span className="text-warmGold">🇬🇧</span>
                 <span className="text-snowWhite/80 font-body">UK Based Service</span>
@@ -101,16 +98,20 @@ export default function Footer() {
                 <span className="text-warmGold">💷</span>
                 <span className="text-snowWhite/80 font-body font-bold">£12.50 per video</span>
               </li>
+              <li className="flex items-center space-x-2">
+                <span className="text-warmGold">⚡</span>
+                <span className="text-snowWhite/80 font-body">Lightning Fast Delivery</span>
+              </li>
             </ul>
 
             {/* CTA in Footer */}
             <div className="mt-6">
               <Link
                 href="/upload"
-                className="inline-flex items-center bg-warmGold text-charcoal font-bold px-6 py-3 rounded-xl hover:bg-warmGold/90 transition-all duration-300 shadow-gold group"
+                className="inline-flex items-center bg-warmGold text-charcoal font-bold px-4 py-3 rounded-xl hover:bg-warmGold/90 transition-all duration-300 shadow-gold group whitespace-nowrap sm:px-6 lg:px-8"
               >
-                <span className="text-lg mr-2">🎬</span>
-                <span>Start Creating</span>
+                <span className="text-base mr-2 sm:text-lg">🎅</span>
+                <span className="text-sm sm:text-base">See Santa Today!</span>
               </Link>
             </div>
           </div>
@@ -137,6 +138,7 @@ export default function Footer() {
               <div className="w-2 h-2 bg-evergreen rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </footer>

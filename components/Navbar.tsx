@@ -30,38 +30,33 @@ const Navbar = () => {
       className={cn(
         "sticky inset-x-0 top-0 z-50 transition-all duration-300 christmas-lights",
         scrolled
-          ? "h-16 bg-white/95 backdrop-blur-xl border-b border-warmGold/20 shadow-frost"
-          : "h-20 bg-white/40 backdrop-blur-lg border-b border-transparent"
+          ? "h-14 bg-white/95 backdrop-blur-2xl border-b border-warmGold/20 shadow-2xl sm:h-16"
+          : "h-16 bg-white/30 backdrop-blur-xl border-b border-transparent sm:h-20"
       )}
     >
       <MaxWidthWrapper>
         <div className={cn(
           "flex items-center justify-between transition-all duration-300",
-          scrolled ? "h-16" : "h-20"
+          scrolled ? "h-14 sm:h-16" : "h-16 sm:h-20"
         )}>
           <Link
             href="/"
             className="flex z-40 justify-center items-center gap-2 group"
           >
             <div className="relative">
-              <Image
-                src="/logo.png"
-                alt="Santa Doorbell Magic logo"
-                width={50}
-                height={50}
-                quality={100}
+              <span
                 className={cn(
-                  "transition-all duration-300",
-                  scrolled ? "w-8 h-8" : "w-10 h-10"
+                  "text-4xl transition-all duration-300",
+                  scrolled ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl"
                 )}
-              />
-              {/* Santa Hat Decoration */}
-              <div className="absolute -top-1 -right-1 text-xs animate-bounce">🎅</div>
+              >
+                🎅
+              </span>
             </div>
             <div className="flex flex-col">
               <span className={cn(
                 "font-heading font-bold text-christmasRed text-glow transition-all duration-300",
-                scrolled ? "text-xl" : "text-2xl"
+                scrolled ? "text-lg sm:text-xl" : "text-xl sm:text-2xl"
               )}>
                 Seasonal Santa
               </span>
@@ -102,16 +97,16 @@ const Navbar = () => {
                   </Link>
                   <Link
                     className={cn(
-                      "btn-vibrant btn-magnetic text-white font-bold rounded-xl transition-all duration-300 group relative overflow-hidden",
+                      "btn-vibrant btn-magnetic text-white font-bold rounded-xl transition-all duration-300 group relative overflow-hidden whitespace-nowrap",
                       scrolled
-                        ? "px-4 py-2 text-sm"
-                        : "px-6 py-3 text-base"
+                        ? "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm lg:px-6 lg:py-2 lg:text-base"
+                        : "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-3 lg:text-lg"
                     )}
                     href="/upload"
                   >
                     <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
-                    <span className="text-lg mr-2">🎬</span>
-                    <span className="relative z-10">Upload Video</span>
+                    <span className="text-sm mr-1 sm:text-lg sm:mr-2 lg:text-xl">🎅</span>
+                    <span className="relative z-10">See Santa Today!</span>
                   </Link>
                 </>
               ) : (
