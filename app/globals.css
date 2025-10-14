@@ -26,7 +26,7 @@
     --special: 0 0% 96.1%;
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -56,6 +56,25 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Enhanced mobile typography */
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  @media (min-width: 641px) {
+    html {
+      font-size: 16px;
+    }
   }
 }
 
@@ -64,8 +83,12 @@
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(300%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
 }
 
 .animate-shimmer {
@@ -103,7 +126,7 @@
 
   /* Rainbow Gradient Text */
   .text-rainbow {
-    background: linear-gradient(90deg, #FF0040, #00FF88, #FFD700, #FF0040);
+    background: linear-gradient(90deg, #ff0040, #00ff88, #ffd700, #ff0040);
     background-size: 300% 100%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -113,57 +136,93 @@
 
   /* Gradient Text */
   .text-gradient {
-    background: linear-gradient(90deg, #C1272D 0%, #D2001F 100%);
+    background: linear-gradient(90deg, #c1272d 0%, #d2001f 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .text-gradient-gold {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  /* Glass Morphism */
+  /* Modern Glass Morphism */
   .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
 
   .glass-frost {
-    background: rgba(169, 214, 229, 0.1);
+    background: rgba(169, 214, 229, 0.08);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(169, 214, 229, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-modern {
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(169, 214, 229, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   }
 
   /* Gradient Borders */
   .border-gradient {
     border: 3px solid transparent;
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(90deg, #FF0040, #00FF88, #FFD700) border-box;
+    background:
+      linear-gradient(white, white) padding-box,
+      linear-gradient(90deg, #ff0040, #00ff88, #ffd700) border-box;
   }
 
   .border-gradient-animate {
-    border: 2px solid #C1272D;
+    border: 2px solid #c1272d;
   }
 
-  /* Enhanced Button Styles */
+  /* Modern Button Styles */
   .btn-vibrant {
-    background: linear-gradient(90deg, #C1272D 0%, #D2001F 100%);
-    box-shadow: 0px 4px 12px rgba(193, 39, 45, 0.2);
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #c1272d 0%, #d2001f 100%);
+    box-shadow: 0 4px 16px rgba(193, 39, 45, 0.25);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-vibrant::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .btn-vibrant:hover::before {
+    left: 100%;
   }
 
   .btn-vibrant:hover {
-    box-shadow: 0px 6px 16px rgba(193, 39, 45, 0.3);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(193, 39, 45, 0.4);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .btn-vibrant:active {
+    transform: translateY(0) scale(0.98);
   }
 
   .btn-electric {
-    background: linear-gradient(90deg, #1B4D3E 0%, #2D5A4D 100%);
+    background: linear-gradient(90deg, #1b4d3e 0%, #2d5a4d 100%);
     box-shadow: 0px 4px 12px rgba(27, 77, 62, 0.2);
   }
 
@@ -236,7 +295,7 @@
   }
 
   .diagonal-divider::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -273,7 +332,7 @@
 
   /* Mesh Gradient Background */
   .mesh-gradient {
-    background: linear-gradient(135deg, #FFF9F0 0%, #F8F8F8 100%);
+    background: linear-gradient(135deg, #fff9f0 0%, #f8f8f8 100%);
   }
 
   /* Shimmer Loading Effect */
@@ -301,10 +360,10 @@
   .animate-candy-stripe {
     background-image: repeating-linear-gradient(
       45deg,
-      #FF0040,
-      #FF0040 10px,
-      #FFFFFF 10px,
-      #FFFFFF 20px
+      #ff0040,
+      #ff0040 10px,
+      #ffffff 10px,
+      #ffffff 20px
     );
     animation: candy-stripe 1s linear infinite;
   }
@@ -344,7 +403,7 @@
   }
 
   .christmas-lights::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -353,10 +412,10 @@
     background: linear-gradient(
       90deg,
       transparent,
-      #FF0040,
-      #00FF88,
-      #FFD700,
-      #FF0040,
+      #ff0040,
+      #00ff88,
+      #ffd700,
+      #ff0040,
       transparent
     );
     animation: lights-move 3s linear infinite;
@@ -381,6 +440,49 @@
       0 0 20px rgba(255, 0, 64, 0.3),
       0 0 40px rgba(255, 0, 64, 0.1),
       2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Modern Card Styles */
+  .card-modern {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-modern:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Modern Gradient Text */
+  .text-gradient-modern {
+    background: linear-gradient(135deg, #c1272d 0%, #ffd700 50%, #1b4d3e 100%);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  /* Floating Animation */
+  .float-modern {
+    animation: float-modern 6s ease-in-out infinite;
+  }
+
+  @keyframes float-modern {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
   }
 }
 
@@ -410,17 +512,34 @@
 }
 
 @keyframes mesh-shift {
-  0%, 100% {
-    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  0%,
+  100% {
+    background-position:
+      0% 0%,
+      0% 0%,
+      0% 0%,
+      0% 0%;
   }
   25% {
-    background-position: 50% 50%, 20% 30%, 70% 20%, 0% 0%;
+    background-position:
+      50% 50%,
+      20% 30%,
+      70% 20%,
+      0% 0%;
   }
   50% {
-    background-position: 100% 100%, 40% 60%, 30% 70%, 0% 0%;
+    background-position:
+      100% 100%,
+      40% 60%,
+      30% 70%,
+      0% 0%;
   }
   75% {
-    background-position: 20% 80%, 80% 20%, 90% 40%, 0% 0%;
+    background-position:
+      20% 80%,
+      80% 20%,
+      90% 40%,
+      0% 0%;
   }
 }
 
@@ -434,7 +553,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 0 20px rgba(255, 0, 64, 0.5),
       0 0 40px rgba(255, 0, 64, 0.2);
@@ -458,32 +578,74 @@
 }
 
 @keyframes candy-stripe {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 40px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-  20%, 40%, 60%, 80% { transform: translateX(10px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(10px);
+  }
 }
 
 @keyframes gift-pop {
-  0% { transform: scale(0) rotate(0); }
-  50% { transform: scale(1.2) rotate(10deg); }
-  100% { transform: scale(1) rotate(0); }
+  0% {
+    transform: scale(0) rotate(0);
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
 }
 
 @keyframes santa-slide {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(calc(100vw + 100px)); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px));
+  }
 }
 
 @keyframes gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
     background-position: 100% 50%;
   }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
 }

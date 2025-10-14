@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import ImagePreview from '@/components/image-preview';
-import UploadRequirements from './UploadRequirements';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import ImagePreview from "@/components/image-preview";
+import UploadRequirements from "./UploadRequirements";
 
 interface ImageUploaderProps {
   file: File | null;
@@ -24,16 +30,16 @@ export default function ImageUploader({
   onProceedToPayment,
   onTestGeneration,
   isProcessing,
-  error
+  error,
 }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === "dragleave") {
       setDragActive(false);
     }
   };
@@ -50,7 +56,7 @@ export default function ImageUploader({
 
   const handleFile = (selectedFile: File) => {
     // Basic client-side validation
-    if (!selectedFile.type.startsWith('image/')) {
+    if (!selectedFile.type.startsWith("image/")) {
       return; // Let parent handle error
     }
 
@@ -69,22 +75,22 @@ export default function ImageUploader({
 
   if (file) {
     return (
-      <Card variant="chunky" className="w-full p-8">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-christmasRed text-2xl text-white shadow-glow">
+      <Card variant="chunky" className="w-full p-6 sm:p-8">
+        <div className="mb-4 text-center sm:mb-6">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-christmasRed text-xl text-white shadow-glow sm:h-16 sm:w-16 sm:text-2xl">
             📷
           </div>
-          <CardTitle className="mb-2 font-heading text-2xl text-christmasRed">
+          <CardTitle className="mb-2 font-heading text-xl text-christmasRed sm:text-2xl">
             Perfect! Ready to Create Magic
           </CardTitle>
-          <CardDescription className="font-body text-charcoal/70">
+          <CardDescription className="font-body text-sm text-charcoal/70 sm:text-base">
             Your photo is ready for Santa transformation
           </CardDescription>
         </div>
 
         <ImagePreview file={file} onRemove={onFileRemove} />
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
           <Button
             onClick={onProceedToPayment}
             disabled={isProcessing}
@@ -106,7 +112,7 @@ export default function ImageUploader({
           </Button>
 
           {/* Test Mode Button - Only show in development */}
-          {process.env.NEXT_PUBLIC_TEST_MODE === 'true' && onTestGeneration && (
+          {process.env.NEXT_PUBLIC_TEST_MODE === "true" && onTestGeneration && (
             <Button
               onClick={onTestGeneration}
               disabled={isProcessing}
@@ -132,25 +138,25 @@ export default function ImageUploader({
   }
 
   return (
-    <Card variant="chunky" className="w-full p-8">
-      <div className="mb-6 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-christmasRed text-2xl text-white shadow-glow">
+    <Card variant="chunky" className="w-full p-6 sm:p-8">
+      <div className="mb-4 text-center sm:mb-6">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-christmasRed text-xl text-white shadow-glow sm:h-16 sm:w-16 sm:text-2xl">
           📷
         </div>
-        <CardTitle className="mb-2 font-heading text-2xl text-christmasRed">
+        <CardTitle className="mb-2 font-heading text-xl text-christmasRed sm:text-2xl">
           Choose Your Photo
         </CardTitle>
-        <CardDescription className="font-body text-charcoal/70">
-          Drag and drop your image file here, or click to browse
+        <CardDescription className="font-body text-sm text-charcoal/70 sm:text-base">
+          Upload a screenshot from your doorbell camera
         </CardDescription>
       </div>
 
       <div
         className={cn(
-          "group relative min-h-[400px] overflow-hidden rounded-[40px] border-[8px] border-dashed bg-gradient-to-br from-frostBlue/20 via-white to-cream p-12 transition-all duration-300",
+          "group relative min-h-[200px] overflow-hidden rounded-2xl border-4 border-dashed bg-gradient-to-br from-frostBlue/20 via-white to-cream p-4 transition-all duration-300 sm:min-h-[250px] sm:rounded-3xl sm:p-6",
           dragActive
-            ? "scale-[1.02] border-electricGreen bg-gradient-to-br from-electricGreen/10 via-white to-warmGold/10"
-            : "border-christmasRed hover:scale-[1.02] hover:border-electricGreen hover:bg-gradient-to-br hover:from-electricGreen/10 hover:via-white hover:to-warmGold/10",
+            ? "border-electricGreen from-electricGreen/10 scale-[1.02] bg-gradient-to-br via-white to-warmGold/10"
+            : "hover:border-electricGreen hover:from-electricGreen/10 border-christmasRed hover:scale-[1.02] hover:bg-gradient-to-br hover:via-white hover:to-warmGold/10",
         )}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -166,16 +172,26 @@ export default function ImageUploader({
 
         {/* Center Content */}
         <div className="relative flex h-full flex-col items-center justify-center text-center">
-          <div className="mb-6 text-8xl">📹</div>
-          <h2 className="mb-4 font-heading text-4xl font-bold uppercase text-charcoal">
-            Drop Your Photo Here
-          </h2>
-          <p className="mb-8 font-body text-xl text-charcoal/70">
-            or click to browse
-          </p>
+          <div className="mb-4 text-6xl sm:text-8xl">🚪</div>
+
+          {/* British Christmas Knock Knock Joke */}
+          <div className="mb-3 space-y-1">
+            <h2 className="font-heading text-lg font-bold text-charcoal sm:text-xl">
+              Knock, knock!
+            </h2>
+            <p className="font-body text-base font-semibold text-christmasRed sm:text-lg">
+              Who&apos;s there?
+            </p>
+            <p className="font-body text-base font-bold text-warmGold sm:text-lg">
+              Santa Claus!
+            </p>
+            <p className="font-body text-xs text-charcoal/70 sm:text-sm">
+              Drop your doorbell screenshot here to see the magic
+            </p>
+          </div>
 
           {/* Festive CTA */}
-          <div className="flex items-center gap-4 text-3xl">
+          <div className="flex items-center gap-3 text-2xl sm:gap-4 sm:text-3xl">
             <span>🎅</span>
             <span>🎄</span>
             <span>🎁</span>

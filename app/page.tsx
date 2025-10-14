@@ -1,383 +1,689 @@
 "use client";
 
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import AnimatedSnow, { SubtleSnow } from "@/components/animated-snow";
-// Removed diagonal sections for cleaner design
+import { AuroraHero } from "@/components/hero-section";
+import { useState } from "react";
+import { useErrorHandling } from "@/hooks/use-error-handling";
+import ErrorDisplay from "@/components/error-display";
+import { createError } from "@/lib/error-handler";
 
 export default function Home() {
+  const [file, setFile] = useState<File | null>(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [selectedQuality, setSelectedQuality] = useState<"720p" | "1080p">("720p");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+
+  // Error handling
+  const { error, clearError, handleError, isRetrying } = useErrorHandling();
+
+  // Calculate price based on quality
+  const price = selectedQuality === "720p" ? "£6.99" : "£9.99";
+
+  const handleFileSelect = (selectedFile: File) => {
+    clearError();
+
+    // Validate file type
+    if (!selectedFile.type.startsWith("image/")) {
+      handleError(createError.invalidImageFormat(), "upload");
+      return;
+    }
+
+    // Validate file size (max 20MB)
+    if (selectedFile.size > 20 * 1024 * 1024) {
+      handleError(createError.imageTooBig("20MB"), "upload");
+      return;
+    }
+
+    setFile(selectedFile);
+  };
+
+  const handleFileRemove = () => {
+    setFile(null);
+    clearError();
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileSelect(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFileSelect(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!firstName || !lastName) {
+      handleError(createError.generic("Please enter your full name"), "upload");
+      return;
+    }
+
+    if (!email) {
+      handleError(createError.generic("Please enter your email address"), "upload");
+      return;
+    }
+
+    if (!file) {
+      handleError(createError.generic("Please upload a doorbell screenshot first"), "upload");
+      return;
+    }
+
+    setIsProcessing(true);
+    clearError();
+
+    try {
+      console.log("Starting scene analysis and order creation...");
+
+      // First, analyze the scene and create the order
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const analysisResponse = await fetch("/api/analyze-scene", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!analysisResponse.ok) {
+        throw new Error(`Analysis failed: ${analysisResponse.statusText}`);
+      }
+
+      const analysisData = await analysisResponse.json();
+
+      if (!analysisData.success) {
+        throw new Error(analysisData.error || "Scene analysis failed");
+      }
+
+      // Use the best prompt automatically
+      const bestPrompt = analysisData.prompts?.[0];
+      if (!bestPrompt) {
+        throw new Error("No suitable video prompts generated");
+      }
+
+      // Create order with analysis data
+      const orderResponse = await fetch("/api/order/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          analysisId: analysisData.analysisId,
+          selectedPromptId: bestPrompt.id,
+          quality: selectedQuality,
+          price: selectedQuality === "720p" ? 6.99 : 9.99,
+        }),
+      });
+
+      const orderResult = await orderResponse.json();
+
+      if (!orderResult.success) {
+        throw new Error(orderResult.error || "Failed to create order");
+      }
+
+      // Store order ID and redirect to payment
+      if (orderResult.orderId) {
+        sessionStorage.setItem("currentOrderId", orderResult.orderId);
+      }
+
+      if (orderResult.checkoutUrl) {
+        window.location.href = orderResult.checkoutUrl;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (error) {
+      console.error("Order creation failed:", error);
+      handleError(
+        createError.generic(
+          error instanceof Error
+            ? error.message
+            : "Failed to process your order. Please try again.",
+        ),
+        "upload",
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleTestGeneration = async () => {
+    if (!file) {
+      handleError(createError.generic("No file selected"), "test");
+      return;
+    }
+
+    setIsProcessing(true);
+    clearError();
+
+    try {
+      console.log("Starting test video generation...");
+
+      // First, analyze the scene
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const analysisResponse = await fetch("/api/analyze-scene", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!analysisResponse.ok) {
+        throw new Error(`Analysis failed: ${analysisResponse.statusText}`);
+      }
+
+      const analysisData = await analysisResponse.json();
+
+      if (!analysisData.success) {
+        throw new Error(analysisData.error || "Scene analysis failed");
+      }
+
+      // Use the best prompt automatically
+      const bestPrompt = analysisData.prompts?.[0];
+      if (!bestPrompt) {
+        throw new Error("No suitable video prompts generated");
+      }
+
+      // Create order without payment in test mode
+      const orderResponse = await fetch("/api/order/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "test@example.com",
+          analysisId: analysisData.analysisId,
+          selectedPromptId: bestPrompt.id,
+          testMode: true,
+        }),
+      });
+
+      const orderResult = await orderResponse.json();
+
+      if (!orderResult.success) {
+        throw new Error(orderResult.error || "Failed to create test order");
+      }
+
+      console.log("Test order created:", orderResult.orderId);
+
+      // Directly trigger video processing
+      const processResponse = await fetch("/api/process-video-queue", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: orderResult.orderId,
+          analysisId: analysisData.analysisId,
+          promptId: bestPrompt.id,
+          videoDuration: 10,
+        }),
+      });
+
+      const processResult = await processResponse.json();
+
+      if (!processResult.success) {
+        throw new Error(
+          processResult.details || "Failed to start video processing",
+        );
+      }
+
+      console.log("Video processing started for test order");
+
+      // Store order ID and redirect to processing page
+      sessionStorage.setItem("currentOrderId", orderResult.orderId);
+      window.location.href = `/processing?orderId=${orderResult.orderId}`;
+    } catch (error) {
+      console.error("Test generation failed:", error);
+      handleError(
+        createError.generic(
+          error instanceof Error
+            ? error.message
+            : "Test generation failed. Please try again.",
+        ),
+        "test",
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
   return (
-    <div>
-      <Navbar />
-      <AnimatedSnow count={30} />
+    <div className="bg-black">
+      <AuroraHero />
 
-      {/* Hero Section - Clean Layout */}
-      <div className="bg-gradient-to-br from-frostBlue/20 to-cream/50 pb-16 pt-0">
-        <div className="mesh-gradient relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-christmasRed/5 via-transparent to-warmGold/5" />
-
-          <MaxWidthWrapper className="relative z-10">
-            <div className="flex flex-col items-center justify-between py-16 lg:flex-row lg:py-20">
-              {/* Left Content - 60% */}
-              <div className="flex-1 space-y-8 text-center lg:w-3/5 lg:text-left">
-                {/* Christmas Badge */}
-                <div className="animate-fade-up border-3 border-gradient-animate glass-frost mx-auto mb-6 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full px-8 py-3 shadow-gold-lg backdrop-blur transition-all hover:scale-105 lg:mx-0">
-                  <p className="text-glow text-base font-bold text-christmasRed">
-                    🎄 Magical Christmas Videos Available Now!
-                  </p>
-                </div>
-
-                {/* Massive Staggered Heading */}
-                <div className="space-y-2">
-                  <h1 className="font-display text-display-sm leading-none tracking-tight md:text-display">
-                    <span className="animate-fade-up text-gradient pulse-glow block">
-                      BRING
-                    </span>
-                    <span className="animate-fade-up-delay-1 text-gradient block">
-                      SANTA
-                    </span>
-                    <span className="animate-fade-up-delay-2 text-hero-glow block">
-                      TO YOUR
-                    </span>
-                    <span className="animate-fade-up-delay-3 text-glow block text-christmasRed">
-                      DOORSTEP
-                    </span>
-                  </h1>
-                </div>
-
-                <p className="animate-fade-up-delay-3 mt-8 max-w-2xl font-body text-body-lg font-medium leading-relaxed text-charcoal">
-                  Transform your security camera photo into{" "}
-                  <span className="text-glow font-bold text-christmasRed">
-                    magical Christmas memories!
-                  </span>{" "}
-                  Upload your photo, pay{" "}
-                  <span className="text-glow-gold font-bold text-warmGold">
-                    £12.50
-                  </span>
-                  , and receive a personalized Santa video within minutes.
-                </p>
-
-                {/* Enhanced CTA Buttons */}
-                <div className="animate-fade-up-delay-3 mt-12 flex w-full flex-col gap-6 sm:w-auto sm:flex-row">
-                  <Link
-                    className="btn-vibrant btn-magnetic glow-pulse group relative flex min-h-[64px] items-center justify-center overflow-hidden rounded-2xl px-12 py-6 text-button-lg font-bold text-white"
-                    href={"/upload"}
-                  >
-                    <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
-                    <span className="text-xl">📸</span>
-                    <span className="relative z-10 ml-2">
-                      Upload Your Photo
-                    </span>
-                  </Link>
-                  <Link
-                    className="btn-electric btn-magnetic group relative flex min-h-[64px] items-center justify-center overflow-hidden rounded-2xl px-12 py-6 text-button-lg font-bold text-white"
-                    href={"/how-it-works"}
-                  >
-                    <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
-                    <span className="text-xl">✨</span>
-                    <span className="relative z-10 ml-2">See How It Works</span>
-                  </Link>
-                </div>
-
-                {/* Floating Trust Signals */}
-                <div className="animate-fade-up-delay-3 mt-12 flex items-center justify-center space-x-8 font-body text-sm text-charcoal/70 lg:justify-start">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-christmasRed">⚡</span>
-                    <span>2 min delivery</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-warmGold">🔒</span>
-                    <span>Secure payment</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-evergreen">🎄</span>
-                    <span>UK based</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Visual Content - 40% */}
-              <div className="relative mt-12 flex-1 lg:mt-0 lg:w-2/5">
-                <div className="animate-fade-up-delay-2 relative">
-                  {/* Main Video Card */}
-                  <div className="relative rounded-3xl border-2 border-warmGold/30 bg-cream/80 p-4 shadow-frost backdrop-blur">
-                    <video
-                      src="/VIDEO-2024-12-12-15-26-57.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full max-w-full rounded-2xl shadow-2xl ring-2 ring-christmasRed/20"
-                      style={{ height: "auto" }}
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-
-                    {/* Video Label with Glow */}
-                    <div className="absolute bottom-6 left-6 rounded-full bg-christmasRed/90 px-4 py-2 font-body text-sm font-semibold text-white shadow-glow">
-                      🎬 Santa Doorbell Magic Demo
-                    </div>
-
-                    {/* Floating Stats */}
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 transform rounded-full bg-warmGold px-4 py-2 text-xs font-bold text-charcoal shadow-gold">
-                      1000+ Happy Families
-                    </div>
-                  </div>
-                </div>
-
-                {/* Scroll Indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform animate-bounce">
-                  <div className="flex h-10 w-6 justify-center rounded-full border-2 border-christmasRed/50">
-                    <div className="mt-2 h-3 w-1 animate-pulse rounded-full bg-christmasRed"></div>
-                  </div>
-                  <p className="mt-2 font-body text-xs text-christmasRed/70">
-                    Scroll
-                  </p>
-                </div>
-              </div>
-            </div>
-          </MaxWidthWrapper>
+      {/* Scrolling Text Section - Overlapping Hero */}
+      <section className="relative z-20 -mt-8 -skew-y-3 transform overflow-hidden bg-gradient-to-r from-red-500 to-green-500 py-3">
+        <div className="animate-scroll flex">
+          <div className="flex items-center space-x-12 whitespace-nowrap">
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+              🎄 Merry Christmas 🎄
+            </span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* How It Works Section */}
-      <div className="bg-warmGold/10 py-20">
-        <SubtleSnow density="light" />
-        <MaxWidthWrapper>
-          <div>
-            <div className="mb-12 text-center">
-              <h2 className="mb-6 font-heading text-title-sm font-bold text-charcoal md:text-title">
-                Create Magic in 3 Simple Steps
-              </h2>
-              <p className="mx-auto max-w-3xl font-body text-body-lg text-charcoal/70">
-                Transform your security camera photo into a magical Santa video in
-                just minutes! Works with doorbell, security, and indoor cameras.
-              </p>
+      {/* Carousel Section */}
+      <section className="bg-black py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <h2 className="mb-12 text-center text-3xl font-bold text-white">
+            🎅 See the Magic in Action
+          </h2>
+
+          {/* Step Cards */}
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {/* Step 1 - Upload */}
+            <div className="relative rounded-xl border border-blue-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-blue-400/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-blue-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+              <div className="relative z-10">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-blue-400">
+                  <svg
+                    className="h-8 w-8 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
+                  </svg>
+                </div>
+                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                  Step 1: Upload
+                </h3>
+                <p className="text-center leading-relaxed text-gray-300">
+                  Upload a screenshot from your doorbell camera. Our AI will analyze the
+                  perfect spot for Santa&apos;s arrival.
+                </p>
+              </div>
             </div>
 
-            {/* Enhanced Steps */}
-            <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="h-full rounded-2xl border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-christmasRed text-2xl text-white shadow-glow">
-                    📸
-                  </div>
-                  <span className="mb-4 inline-block rounded-full bg-christmasRed/10 px-3 py-1 font-body text-sm font-bold text-christmasRed">
-                    Step 1
-                  </span>
-                  <h3 className="mb-3 font-heading text-xl font-bold text-charcoal">
-                    Upload Your Photo
-                  </h3>
-                  <p className="font-body text-charcoal/70">
-                    Upload a photo from any security camera and
-                    our AI analyses the perfect scene
-                  </p>
+            {/* Step 2 - Wait */}
+            <div className="relative rounded-xl border border-green-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-green-400/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-400/20 via-blue-400/20 to-green-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+              <div className="relative z-10">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-green-400">
+                  <svg
+                    className="h-8 w-8 text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
                 </div>
+                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                  Step 2: Wait
+                </h3>
+                <p className="text-center leading-relaxed text-gray-300">
+                  Our AI works its magic behind the scenes. Processing typically
+                  takes just a few minutes.
+                </p>
               </div>
+            </div>
 
-              <div className="text-center">
-                <div className="h-full rounded-2xl border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-warmGold text-2xl text-charcoal shadow-gold">
-                    💳
-                  </div>
-                  <span className="mb-4 inline-block rounded-full bg-warmGold/10 px-3 py-1 font-body text-sm font-bold text-warmGold">
-                    Step 2
-                  </span>
-                  <h3 className="mb-3 font-heading text-xl font-bold text-charcoal">
-                    Pay £12.50 & Relax
-                  </h3>
-                  <p className="font-body text-charcoal/70">
-                    Secure payment via Stripe, then our advanced AI works its
-                    Christmas magic in the background
-                  </p>
+            {/* Step 3 - Receive */}
+            <div className="relative rounded-xl border border-purple-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-purple-400/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-purple-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+              <div className="relative z-10">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-purple-400">
+                  <svg
+                    className="h-8 w-8 text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
                 </div>
-              </div>
-
-              <div className="text-center">
-                <div className="h-full rounded-2xl border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-evergreen text-2xl text-white shadow-glow">
-                    🎅
-                  </div>
-                  <span className="mb-4 inline-block rounded-full bg-evergreen/10 px-3 py-1 font-body text-sm font-bold text-evergreen">
-                    Step 3
-                  </span>
-                  <h3 className="mb-3 font-heading text-xl font-bold text-charcoal">
-                    Receive Your Magic Video
-                  </h3>
-                  <p className="font-body text-charcoal/70">
-                    Get your personalized Santa video delivered to your email
-                    within minutes
-                  </p>
-                </div>
+                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                  Step 3: Receive
+                </h3>
+                <p className="text-center leading-relaxed text-gray-300">
+                  Get your magical Santa video delivered directly to your email.
+                  Share the Christmas magic!
+                </p>
               </div>
             </div>
           </div>
-        </MaxWidthWrapper>
-      </div>
+        </div>
+      </section>
 
-      {/* Features Section */}
-      <div className="bg-cream py-32">
-        <MaxWidthWrapper>
-          <div className=" text-center">
-            <h2 className="mb-6 font-heading text-title-sm font-bold text-charcoal md:text-title">
-              Why Choose Santa Doorbell Magic?
-            </h2>
-            <p className="mx-auto mb-16 max-w-3xl font-body text-body-lg text-charcoal/70">
-              Experience the magic of Christmas with our cutting-edge AI
-              technology
-            </p>
+      {/* Order Form Section */}
+      <section className="bg-gray-900 py-16">
+        <div className="mx-auto max-w-4xl px-4">
+          <h2 className="mb-12 text-center text-3xl font-bold text-white">
+            🎅 Create Your Santa Video
+          </h2>
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              <Card className="flex flex-col items-center justify-center gap-4 border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-4 text-5xl">🎬</div>
-                <CardTitle className="mb-2 font-heading text-xl text-christmasRed">
-                  AI-Powered Magic
-                </CardTitle>
-                <CardDescription className="text-center font-body text-charcoal/70">
-                  Advanced AI seamlessly overlays Santa into your footage with
-                  incredible realism
-                </CardDescription>
-              </Card>
+          <div className="relative overflow-hidden rounded-2xl bg-white p-8 shadow-xl">
+            {/* Animated Border Beam */}
+            <div className="absolute inset-0 rounded-2xl">
+              <div className="absolute inset-0 animate-pulse rounded-2xl bg-gradient-to-r from-red-500/20 via-green-500/20 to-red-500/20"></div>
+            </div>
 
-              <Card className="flex flex-col items-center justify-center gap-4 border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-4 text-5xl">⚡</div>
-                <CardTitle className="mb-2 font-heading text-xl text-christmasRed">
-                  Lightning Fast
-                </CardTitle>
-                <CardDescription className="text-center font-body text-charcoal/70">
-                  Receive your personalized video within minutes of upload and
-                  payment
-                </CardDescription>
-              </Card>
+            <div className="relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name Fields - Inline */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="firstName"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter your first name"
+                      required
+                      disabled={isProcessing}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="lastName"
+                      className="mb-2 block text-sm font-medium text-gray-700"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                      placeholder="Enter your last name"
+                      required
+                      disabled={isProcessing}
+                    />
+                  </div>
+                </div>
 
-              <Card className="flex flex-col items-center justify-center gap-4 border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-4 text-5xl">🎁</div>
-                <CardTitle className="mb-2 font-heading text-xl text-christmasRed">
-                  Perfect Gifts
-                </CardTitle>
-                <CardDescription className="text-center font-body text-charcoal/70">
-                  Create unforgettable Christmas memories that families will
-                  treasure forever
-                </CardDescription>
-              </Card>
+                {/* Email Address */}
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    placeholder="your.email@example.com"
+                    required
+                    disabled={isProcessing}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    We&apos;ll send your magical Santa video to this email address
+                  </p>
+                </div>
+
+                {/* Video Quality Selection */}
+                <div>
+                  <label
+                    htmlFor="quality"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
+                    Video Quality
+                  </label>
+                  <select
+                    id="quality"
+                    name="quality"
+                    value={selectedQuality}
+                    onChange={(e) => setSelectedQuality(e.target.value as "720p" | "1080p")}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    disabled={isProcessing}
+                  >
+                    <option value="720p">720p Video (10 seconds) - £6.99</option>
+                    <option value="1080p">1080p Video (10 seconds) - £9.99</option>
+                  </select>
+                </div>
+
+                {/* Compact File Upload Section */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Upload Your Doorbell Screenshot
+                  </label>
+
+                  {!file ? (
+                    <div
+                      className={`relative cursor-pointer overflow-hidden rounded-lg border-2 border-dashed p-6 text-center transition-all duration-300 ${
+                        dragActive
+                          ? "border-green-500 bg-green-50"
+                          : "border-gray-300 bg-gray-50 hover:border-green-500 hover:bg-green-50"
+                      }`}
+                      onDragEnter={handleDrag}
+                      onDragLeave={handleDrag}
+                      onDragOver={handleDrag}
+                      onDrop={handleDrop}
+                    >
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
+                        onChange={handleFileInput}
+                        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                        disabled={isProcessing}
+                      />
+
+                      <div className="flex flex-col items-center">
+                        <div className="mb-3 text-4xl">📷</div>
+                        <p className="mb-1 text-sm font-medium text-gray-700">
+                          Drag & drop or click to browse
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          JPG, PNG, WebP - Max 20MB
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between rounded-lg border-2 border-green-500 bg-green-50 p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="text-3xl">✅</div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {file.name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleFileRemove}
+                        className="rounded-lg bg-red-500 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-red-600"
+                        disabled={isProcessing}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isProcessing || !file}
+                  className="w-full rounded-lg bg-gradient-to-r from-red-500 to-green-500 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-red-600 hover:to-green-600 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isProcessing ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                      <span>Creating your Santa magic...</span>
+                    </div>
+                  ) : (
+                    `🎅 Create Santa Video - ${price}`
+                  )}
+                </button>
+
+                {/* Test Mode Button */}
+                {process.env.NEXT_PUBLIC_TEST_MODE === "true" && file && (
+                  <button
+                    type="button"
+                    onClick={handleTestGeneration}
+                    disabled={isProcessing}
+                    className="w-full rounded-lg border-2 border-green-500 bg-green-500/10 px-6 py-3 text-sm font-bold text-green-600 transition-all duration-300 hover:scale-105 hover:bg-green-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isProcessing ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-green-600"></div>
+                        <span>Starting Test Generation...</span>
+                      </div>
+                    ) : (
+                      "🧪 Test Video Generation (Dev Mode)"
+                    )}
+                  </button>
+                )}
+
+                {/* Error Display */}
+                {error && (
+                  <div className="mt-4">
+                    <ErrorDisplay
+                      error={error}
+                      onRetry={() => {
+                        clearError();
+                      }}
+                      onDismiss={clearError}
+                      isRetrying={isRetrying}
+                    />
+                  </div>
+                )}
+
+                {/* Trust Markers */}
+                <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
+                  <div className="mb-3 flex items-center justify-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="h-5 w-5 text-green-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium text-green-800">
+                        SSL Secured
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="h-5 w-5 text-green-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium text-green-800">
+                        Verified
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="h-5 w-5 text-green-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium text-green-800">
+                        PCI Compliant
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center space-x-4 text-xs text-green-700">
+                    <span>🔒 256-bit encryption</span>
+                    <span>•</span>
+                    <span>🛡️ Fraud protection</span>
+                    <span>•</span>
+                    <span>💳 Secure payments via Stripe</span>
+                  </div>
+                </div>
+
+                {/* Disclaimer */}
+                <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <p className="text-xs leading-relaxed text-gray-600">
+                    <strong>Disclaimer:</strong> This service is for
+                    entertainment purposes only. No refunds are available once
+                    payment is processed. Sometimes AI can make mistakes - in
+                    this case, we will remake your video for you free of charge.
+                    By proceeding, you agree to these terms and conditions.
+                  </p>
+                </div>
+              </form>
             </div>
           </div>
-        </MaxWidthWrapper>
-      </div>
-
-      {/* Testimonials Section */}
-      <div className="bg-evergreen/5 py-20">
-        <SubtleSnow density="medium" />
-        <MaxWidthWrapper>
-          <div>
-            <div className="mb-16 text-center">
-              <h2 className="mb-6 font-heading text-title-sm font-bold text-charcoal md:text-title">
-                What Families Are Saying
-              </h2>
-              <p className="mx-auto max-w-3xl font-body text-body-lg text-charcoal/70">
-                Join thousands of families who&apos;ve created magical Christmas
-                memories
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              <Card className="border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-6 flex items-center">
-                  <div className="text-2xl text-warmGold">⭐⭐⭐⭐⭐</div>
-                </div>
-                <p className="mb-6 font-body text-lg leading-relaxed text-charcoal/80">
-                  &quot;Absolutely magical! My kids were amazed when they saw
-                  Santa at our door. The video quality is incredible and it
-                  arrived within 10 minutes!&quot;
-                </p>
-                <div className="flex items-center">
-                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-christmasRed font-bold text-white">
-                    S
-                  </div>
-                  <div>
-                    <div className="font-heading font-semibold text-christmasRed">
-                      Sarah M.
-                    </div>
-                    <div className="font-body text-sm text-charcoal/60">
-                      Mother of 3, London
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-6 flex items-center">
-                  <div className="text-2xl text-warmGold">⭐⭐⭐⭐⭐</div>
-                </div>
-                <p className="mb-6 font-body text-lg leading-relaxed text-charcoal/80">
-                  &quot;Perfect Christmas gift! The whole process was so easy
-                  and the result exceeded our expectations. Will definitely use
-                  again next year!&quot;
-                </p>
-                <div className="flex items-center">
-                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-evergreen font-bold text-white">
-                    J
-                  </div>
-                  <div>
-                    <div className="font-heading font-semibold text-christmasRed">
-                      James L.
-                    </div>
-                    <div className="font-body text-sm text-charcoal/60">
-                      Father, Manchester
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="border-2 border-warmGold/20 bg-cream p-8 shadow-frost">
-                <div className="mb-6 flex items-center">
-                  <div className="text-2xl text-warmGold">⭐⭐⭐⭐⭐</div>
-                </div>
-                <p className="mb-6 font-body text-lg leading-relaxed text-charcoal/80">
-                  &quot;The AI technology is incredible - you can&apos;t tell
-                  it&apos;s not real! My family shared this video everywhere.
-                  Worth every penny!&quot;
-                </p>
-                <div className="flex items-center">
-                  <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-warmGold font-bold text-charcoal">
-                    E
-                  </div>
-                  <div>
-                    <div className="font-heading font-semibold text-christmasRed">
-                      Emma R.
-                    </div>
-                    <div className="font-body text-sm text-charcoal/60">
-                      Teacher, Birmingham
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </div>
-
-            {/* Final CTA */}
-            <div className="mt-16 text-center">
-              <Link
-                className="btn-vibrant btn-magnetic glow-pulse group relative inline-flex min-h-[64px] items-center justify-center overflow-hidden rounded-2xl px-16 py-6 text-button-lg font-bold text-white"
-                href={"/upload"}
-              >
-                <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
-                <span className="mr-3 text-xl">🎅</span>
-                <span className="relative z-10">
-                  Create Your Santa Magic Today
-                </span>
-              </Link>
-            </div>
-          </div>
-        </MaxWidthWrapper>
-      </div>
-
-      <Footer />
+        </div>
+      </section>
     </div>
   );
 }

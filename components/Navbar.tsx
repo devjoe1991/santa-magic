@@ -28,54 +28,55 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        "sticky inset-x-0 top-0 z-50 transition-all duration-300 christmas-lights",
+        "christmas-lights sticky inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "h-16 bg-white/95 backdrop-blur-xl border-b border-warmGold/20 shadow-frost"
-          : "h-20 bg-white/40 backdrop-blur-lg border-b border-transparent"
+          ? "h-14 border-b border-warmGold/20 bg-white/95 shadow-2xl backdrop-blur-2xl sm:h-16"
+          : "h-16 border-b border-transparent bg-white/30 backdrop-blur-xl sm:h-20",
       )}
     >
       <MaxWidthWrapper>
-        <div className={cn(
-          "flex items-center justify-between transition-all duration-300",
-          scrolled ? "h-16" : "h-20"
-        )}>
+        <div
+          className={cn(
+            "flex items-center justify-between transition-all duration-300",
+            scrolled ? "h-14 sm:h-16" : "h-16 sm:h-20",
+          )}
+        >
           <Link
             href="/"
-            className="flex z-40 justify-center items-center gap-2 group"
+            className="group z-40 flex items-center justify-center gap-2"
           >
             <div className="relative">
-              <Image
-                src="/logo.png"
-                alt="Santa Doorbell Magic logo"
-                width={50}
-                height={50}
-                quality={100}
+              <span
                 className={cn(
-                  "transition-all duration-300",
-                  scrolled ? "w-8 h-8" : "w-10 h-10"
+                  "text-4xl transition-all duration-300",
+                  scrolled ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl",
                 )}
-              />
-              {/* Santa Hat Decoration */}
-              <div className="absolute -top-1 -right-1 text-xs animate-bounce">🎅</div>
+              >
+                🎅
+              </span>
             </div>
             <div className="flex flex-col">
-              <span className={cn(
-                "font-heading font-bold text-christmasRed text-glow transition-all duration-300",
-                scrolled ? "text-xl" : "text-2xl"
-              )}>
+              <span
+                className={cn(
+                  "text-glow font-heading font-bold text-christmasRed transition-all duration-300",
+                  scrolled ? "text-lg sm:text-xl" : "text-xl sm:text-2xl",
+                )}
+              >
                 Seasonal Santa
               </span>
-              <span className="text-xs text-charcoal/60 font-body -mt-1">Doorbell Magic</span>
+              <span className="-mt-1 font-body text-xs text-charcoal/60">
+                Doorbell Magic
+              </span>
             </div>
           </Link>
-          <div className="flex gap-1 sm:gap-4 items-center">
+          <div className="flex items-center gap-1 sm:gap-4">
             {!isUserSignedIn ? (
               <MobileNav />
             ) : (
               <Link
                 className={buttonVariants({
                   size: "sm",
-                  className: "sm:hidden mr-3",
+                  className: "mr-3 sm:hidden",
                 })}
                 href="/dashboard"
               >
@@ -88,30 +89,32 @@ const Navbar = () => {
                 <>
                   <Link
                     href="/how-it-works"
-                    className="relative group px-3 py-2 text-charcoal/80 hover:text-christmasRed font-body font-medium transition-all duration-300"
+                    className="group relative px-3 py-2 font-body font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
                   >
                     How It Works
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                   <Link
                     href="/faq"
-                    className="relative group px-3 py-2 text-charcoal/80 hover:text-christmasRed font-body font-medium transition-all duration-300"
+                    className="group relative px-3 py-2 font-body font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
                   >
                     FAQ
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
+                    <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                   <Link
                     className={cn(
-                      "btn-vibrant btn-magnetic text-white font-bold rounded-xl transition-all duration-300 group relative overflow-hidden",
+                      "btn-vibrant btn-magnetic group relative overflow-hidden whitespace-nowrap rounded-xl font-bold text-white transition-all duration-300",
                       scrolled
-                        ? "px-4 py-2 text-sm"
-                        : "px-6 py-3 text-base"
+                        ? "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm lg:px-6 lg:py-2 lg:text-base"
+                        : "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-3 lg:text-lg",
                     )}
                     href="/upload"
                   >
-                    <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
-                    <span className="text-lg mr-2">🎬</span>
-                    <span className="relative z-10">Upload Video</span>
+                    <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
+                    <span className="mr-1 text-sm sm:mr-2 sm:text-lg lg:text-xl">
+                      🎅
+                    </span>
+                    <span className="relative z-10">See Santa Today!</span>
                   </Link>
                 </>
               ) : (
@@ -130,7 +133,7 @@ const Navbar = () => {
 
             {/* User profile mockup below, e.g using Clerk: <UserButton afterSignOutUrl="/" /> */}
             {isUserSignedIn && (
-              <div className="bg-emerald-600 border-2 border-black shadow-lg rounded-full w-10 h-10"></div>
+              <div className="h-10 w-10 rounded-full border-2 border-black bg-emerald-600 shadow-lg"></div>
             )}
           </div>
         </div>
