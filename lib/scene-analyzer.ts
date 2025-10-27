@@ -41,9 +41,11 @@ Please analyze and return ONLY a valid JSON object with this exact structure:
   "layout": {
     "entryType": "covered porch/open doorway/apartment/etc",
     "description": "brief description of the space",
-    "lighting": "bright/dim/dark",
+    "lighting": "daylight/dusk/night/indoor_warm/indoor_cool/bright/dim/dark",
     "visibility": "clear/partially obscured/poor",
-    "sceneType": "indoor/outdoor/unclear"
+    "sceneType": "indoor/outdoor/unclear",
+    "cameraType": "color/night_vision/black_white/monochrome",
+    "colorGrading": "warm_indoor/cool_outdoor/neutral/green_tint/grayscale"
   },
   "suitabilityScore": 85,
   "recommendations": ["suggestion 1", "suggestion 2"],
@@ -63,10 +65,35 @@ Focus on identifying optimal zones for Santa positioning:
 - Areas to avoid (direct center, too close, too far)
 - Best positioning for a £5 video that excites children while feeling authentic
 
-IMPORTANT: Determine sceneType:
+IMPORTANT: Determine sceneType, cameraType, and colorGrading:
+
+SceneType:
 - "indoor": Christmas tree visible, living room furniture, hallway, stairs, interior walls, ceiling lights
 - "outdoor": sky visible, cars, driveways, garden, exterior walls, street lighting, doorbell camera view
-- "unclear": ambiguous scenes that could be either`
+- "unclear": ambiguous scenes that could be either
+
+CameraType (analyze image characteristics):
+- "color": Full color image with natural colors visible
+- "night_vision": Green/IR tinted image, typically monochrome with green cast
+- "black_white": Grayscale/monochrome image without color tint
+- "monochrome": Any single-color or grayscale security camera footage
+
+ColorGrading (analyze overall color tone):
+- "warm_indoor": Warm yellow/orange tones from indoor lighting
+- "cool_outdoor": Cool blue/white tones from natural/outdoor light
+- "neutral": Balanced color temperature, no strong tint
+- "green_tint": Green-tinted from night vision/IR camera
+- "grayscale": No color, black and white only
+
+Lighting (be specific about light source and time):
+- "daylight": Bright natural outdoor daylight
+- "dusk": Low natural light, transitional lighting
+- "night": Dark with artificial lighting or IR
+- "indoor_warm": Indoor with warm artificial lights (incandescent/warm LED)
+- "indoor_cool": Indoor with cool artificial lights (fluorescent/cool LED)
+- "bright": Generally bright but source unclear
+- "dim": Low light levels
+- "dark": Very low light, barely visible`
           },
           {
             type: "image_url",
@@ -115,7 +142,9 @@ IMPORTANT: Determine sceneType:
         description: 'Unable to analyze scene details',
         lighting: 'dim',
         visibility: 'poor',
-        sceneType: 'unclear'
+        sceneType: 'unclear',
+        cameraType: 'color',
+        colorGrading: 'neutral'
       },
       suitabilityScore: 50,
       recommendations: ['Analysis failed - manual review recommended']

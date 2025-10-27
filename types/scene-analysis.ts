@@ -21,9 +21,11 @@ export interface Decorations {
 export interface LayoutInfo {
   entryType: string;
   description: string;
-  lighting: 'bright' | 'dim' | 'dark';
+  lighting: 'bright' | 'dim' | 'dark' | 'daylight' | 'dusk' | 'night' | 'indoor_warm' | 'indoor_cool';
   visibility: 'clear' | 'partially obscured' | 'poor';
   sceneType: 'indoor' | 'outdoor' | 'unclear';
+  cameraType?: 'color' | 'night_vision' | 'black_white' | 'monochrome';
+  colorGrading?: 'warm_indoor' | 'cool_outdoor' | 'neutral' | 'green_tint' | 'grayscale';
 }
 
 export interface SceneAnalysis {

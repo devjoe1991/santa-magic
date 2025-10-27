@@ -56,6 +56,9 @@ export default function PromptDisplay({
 
   const getCategoryIcon = (category: VideoPrompt['category']) => {
     switch (category) {
+      case 'lighting_match': return '💡';
+      case 'position_based': return '📍';
+      case 'camera_adaptive': return '📹';
       case 'entrance': return '🚪';
       case 'delivery': return '🎁';
       case 'magical': return '✨';
@@ -66,7 +69,17 @@ export default function PromptDisplay({
   };
 
   const getCategoryLabel = (category: VideoPrompt['category']) => {
-    return category.charAt(0).toUpperCase() + category.slice(1);
+    const labels: Record<VideoPrompt['category'], string> = {
+      'lighting_match': 'Lighting Match',
+      'position_based': 'Position Based',
+      'camera_adaptive': 'Camera Adaptive',
+      'entrance': 'Entrance',
+      'delivery': 'Delivery',
+      'magical': 'Magical',
+      'interactive': 'Interactive',
+      'departure': 'Departure'
+    };
+    return labels[category] || category;
   };
 
   if (!prompt) {

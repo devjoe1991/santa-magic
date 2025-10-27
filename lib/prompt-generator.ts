@@ -16,149 +16,170 @@ const DEFAULT_CONFIG: PromptGeneratorConfig = {
   emphasizeChristmas: true,
 };
 
-// Prompt templates focused on Santa SNEAKING - matching proven working prompt
-// Outdoor prompts - Santa leaving after chimney delivery
-const OUTDOOR_PROMPT_TEMPLATES: PromptTemplate[] = [
-  // Santa departing after delivery - the main scenario
+// STEALTH-FOCUSED TEMPLATES - Santa sneaking and avoiding detection
+// Outdoor stealth - Santa leaving after delivery
+const OUTDOOR_STEALTH_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-post-delivery-departure',
-    category: 'departure',
-    baseDescription: 'Santa leaving after delivering presents via chimney',
+    id: 'santa-sneaking-left',
+    category: 'position_based',
+    baseDescription: 'Santa sneaking away to the left',
     requiredElements: [],
-    optionalElements: [],
+    optionalElements: ['doors'],
     confidence: 98,
     variations: [
-      'sneaking away from this location after delivering presents inside, moving left',
-      'quietly departing after coming down the chimney, tiptoeing to the right',
-      'leaving this area stealthily with lighter gift bag after his delivery',
-      'creeping away after his visit, mission accomplished'
+      'sneaking away to the left after his delivery, checking over shoulder with Santa sack',
+      'carefully creeping away from doorway to the left, trying not to make noise with his sack',
+      'tiptoeing away to the left side with lighter sack over shoulder, mission accomplished',
+      'quietly departing to the left with burlap sack, glancing back to make sure he wasn\'t seen'
     ]
   },
-  // Santa moving away stealthily
   {
-    id: 'santa-stealthy-departure',
-    category: 'departure',
-    baseDescription: 'Santa moving stealthily away after delivery',
+    id: 'santa-sneaking-right',
+    category: 'position_based',
+    baseDescription: 'Santa sneaking away to the right',
     requiredElements: [],
-    optionalElements: [],
-    confidence: 95,
+    optionalElements: ['doors'],
+    confidence: 98,
     variations: [
-      'tiptoeing away from this location to the left, moving slowly and quietly',
-      'creeping away from this area to the right, staying low and cautious',
-      'moving stealthily away from this location, pausing to listen for sounds',
-      'sneaking away from this area slowly, checking no one sees him'
+      'sneaking away to the right after delivering presents, moving stealthily with sack',
+      'carefully creeping away from entrance to the right with Santa sack over shoulder',
+      'tiptoeing away to the right side with burlap sack, trying to leave undetected',
+      'quietly departing to the right with his sack, staying low and cautious'
     ]
   },
-  // Sneaking away after delivery
   {
-    id: 'santa-sneaking-departure',
-    category: 'departure',
-    baseDescription: 'Santa sneaking away from the property',
-    requiredElements: [],
+    id: 'santa-doorway-stealth',
+    category: 'position_based',
+    baseDescription: 'Santa moving stealthily through doorway',
+    requiredElements: ['doors'],
     optionalElements: [],
-    confidence: 85,
+    confidence: 96,
     variations: [
-      'sneaking away from this location after delivering presents, tiptoeing to the left',
-      'quietly leaving this area after his delivery, trying not to wake anyone',
-      'sneaking away from this location to the right after leaving gifts',
-      'tiptoeing away from this area, mission accomplished'
+      'sneaking through the doorway with sack of presents, trying not to be seen',
+      'carefully moving through entrance while carrying Santa sack, very quiet',
+      'tiptoeing through doorway with burlap sack, checking if anyone is around',
+      'quietly passing through entrance with his sack over shoulder, being extra cautious'
     ]
   },
-  // Santa finishing his visit
   {
-    id: 'santa-finishing-visit',
-    category: 'departure',
-    baseDescription: 'Santa completing his visit and departing',
+    id: 'santa-corner-hiding',
+    category: 'position_based',
+    baseDescription: 'Santa hiding near corner/edge',
     requiredElements: [],
     optionalElements: [],
-    confidence: 93,
+    confidence: 92,
     variations: [
-      'quietly finishing his delivery and sneaking away from this location',
-      'departing after leaving gifts inside, moving carefully away',
-      'tiptoeing away with satisfied smile after successful delivery',
-      'carefully leaving this area after completing his Christmas mission'
+      'peeking around the corner with burlap sack, checking if coast is clear',
+      'hiding near the edge while carrying Santa sack, trying to stay out of sight',
+      'crouching in corner area with sack of presents, attempting to be stealthy',
+      'pressing against wall with his sack, trying not to be noticed'
     ]
   },
-  // Stealthy departure movement
   {
-    id: 'santa-stealthy-exit',
-    category: 'departure',
-    baseDescription: 'Santa moving stealthily away from this location',
+    id: 'santa-departing-stealthy',
+    category: 'position_based',
+    baseDescription: 'Santa stealthily departing after delivery',
     requiredElements: [],
     optionalElements: [],
-    confidence: 90,
+    confidence: 94,
     variations: [
-      'tiptoeing carefully away from this location, trying not to make any sound',
-      'moving stealthily away from this area, checking no one sees him',
-      'sneaking away from this location with careful, quiet steps',
-      'creeping away from this area slowly, pausing every few steps to listen'
-    ]
-  },
-  // Natural departure movements
-  {
-    id: 'santa-natural-departure',
-    category: 'departure',
-    baseDescription: 'Santa departing naturally after his visit',
-    requiredElements: [],
-    optionalElements: [],
-    confidence: 88,
-    variations: [
-      'tiptoeing quietly away from this location, moving carefully and naturally',
-      'moving carefully away from this area with nearly empty gift bag',
-      'pausing mid-departure to adjust his hat, then continuing away from this location',
-      'walking away from this area with careful steps, glancing back satisfied'
+      'sneaking away from this location after completing his delivery with emptier sack',
+      'carefully departing with lighter Santa sack over shoulder, job well done',
+      'tiptoeing away having successfully delivered all presents, carrying his burlap sack',
+      'quietly leaving the scene with sack in hand, checking no one noticed him'
     ]
   }
 ];
 
-// Indoor prompts - Santa in the act of delivering
-const INDOOR_PROMPT_TEMPLATES: PromptTemplate[] = [
+// Indoor stealth - Santa during delivery
+const INDOOR_STEALTH_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-christmas-tree-delivery',
-    category: 'delivery',
-    baseDescription: 'Santa placing presents under Christmas tree',
+    id: 'santa-indoor-tree-stealth',
+    category: 'position_based',
+    baseDescription: 'Santa sneaking toward Christmas tree',
     requiredElements: ['decorations'],
     optionalElements: ['lights'],
     confidence: 98,
     variations: [
-      'quietly placing presents under the Christmas tree while everyone sleeps',
-      'carefully arranging gifts under the tree, trying not to make noise',
-      'tiptoeing to the Christmas tree with his gift bag',
-      'gently setting down presents beneath the tree'
+      'tiptoeing toward the Christmas tree with Santa sack, trying not to wake anyone',
+      'sneaking carefully to the tree while carrying sack of presents, finger to lips',
+      'creeping toward Christmas tree with burlap sack over shoulder, moving very slowly and quietly',
+      'quietly approaching the tree with his sack, being extremely careful'
     ]
   },
   {
-    id: 'santa-indoor-sneaking',
-    category: 'delivery',
+    id: 'santa-indoor-furniture-stealth',
+    category: 'position_based',
+    baseDescription: 'Santa sneaking past furniture',
+    requiredElements: ['furniture'],
+    optionalElements: [],
+    confidence: 94,
+    variations: [
+      'tiptoeing carefully past furniture while carrying sack of presents',
+      'sneaking around the furniture with Santa sack, trying not to bump anything',
+      'creeping past furniture holding burlap sack, moving extra quietly',
+      'carefully navigating around furniture with his sack over shoulder, being very cautious'
+    ]
+  },
+  {
+    id: 'santa-indoor-hallway-stealth',
+    category: 'position_based',
     baseDescription: 'Santa moving stealthily through indoor space',
     requiredElements: [],
     optionalElements: [],
     confidence: 90,
     variations: [
-      'tiptoeing through the living room with his gift bag',
-      'sneaking carefully through the hallway, trying not to wake anyone',
-      'moving quietly through this room while carrying presents',
-      'creeping through the space with careful steps'
-    ]
-  },
-  {
-    id: 'santa-indoor-delivery',
-    category: 'delivery',
-    baseDescription: 'Santa delivering presents indoors',
-    requiredElements: [],
-    optionalElements: [],
-    confidence: 95,
-    variations: [
-      'quietly arranging presents while the family sleeps',
-      'carefully placing gifts in this room, being extra quiet',
-      'tiptoeing around to deliver presents without waking anyone',
-      'stealthily setting down his gift bag to arrange presents'
+      'tiptoeing through the room with Santa sack, trying to stay quiet',
+      'sneaking carefully through the space while carrying sack of presents',
+      'creeping through the area with burlap sack over shoulder, checking no one is awake',
+      'quietly moving through the room with his sack, being extra stealthy'
     ]
   }
 ];
 
-// Combine templates based on scene type
-const PROMPT_TEMPLATES: PromptTemplate[] = [...OUTDOOR_PROMPT_TEMPLATES, ...INDOOR_PROMPT_TEMPLATES];
+// Lighting templates with stealth language
+const LIGHTING_MATCH_TEMPLATES: PromptTemplate[] = [
+  {
+    id: 'santa-lighting-stealth',
+    category: 'lighting_match',
+    baseDescription: 'Santa sneaking while matching lighting',
+    requiredElements: [],
+    optionalElements: [],
+    confidence: 93,
+    variations: [
+      'sneaking through scene with lighting matching ambient environment',
+      'moving stealthily with natural shadows adjusted to scene',
+      'creeping carefully with illumination matching surroundings',
+      'tiptoeing quietly with realistic lighting matching scene conditions'
+    ]
+  }
+];
+
+// Camera templates with stealth language
+const CAMERA_ADAPTIVE_TEMPLATES: PromptTemplate[] = [
+  {
+    id: 'santa-camera-stealth',
+    category: 'camera_adaptive',
+    baseDescription: 'Santa sneaking adapted to camera type',
+    requiredElements: [],
+    optionalElements: [],
+    confidence: 92,
+    variations: [
+      'sneaking through scene with appearance matching security camera footage',
+      'moving stealthily with color grading matching camera characteristics',
+      'creeping carefully with visual style matching doorbell camera',
+      'tiptoeing quietly with aesthetic matching surveillance footage'
+    ]
+  }
+];
+
+// Combine all templates
+const ALL_TEMPLATES: PromptTemplate[] = [
+  ...OUTDOOR_STEALTH_TEMPLATES,
+  ...INDOOR_STEALTH_TEMPLATES,
+  ...LIGHTING_MATCH_TEMPLATES,
+  ...CAMERA_ADAPTIVE_TEMPLATES
+];
 
 // Generate contextual details based on scene elements
 function generateLocationDetails(analysis: SceneAnalysis): string {
@@ -213,10 +234,87 @@ function generateHidingSpot(analysis: SceneAnalysis): string {
   return spots.length > 0 ? spots[0] : 'the entrance';
 }
 
+function generateLightingDescription(analysis: SceneAnalysis): string {
+  const { lighting, cameraType, colorGrading } = analysis.layout;
+
+  // Map lighting conditions to descriptive phrases
+  const lightingDescriptions: Record<string, string> = {
+    'daylight': 'natural daylight with bright outdoor shadows',
+    'dusk': 'soft twilight lighting with reduced contrast',
+    'night': 'low-light conditions with artificial illumination',
+    'indoor_warm': 'warm indoor lighting with yellow-orange tones',
+    'indoor_cool': 'cool indoor lighting with blue-white tones',
+    'bright': 'well-lit environment with clear visibility',
+    'dim': 'moderate lighting with subdued tones',
+    'dark': 'minimal lighting with deep shadows'
+  };
+
+  return lightingDescriptions[lighting] || 'ambient lighting';
+}
+
+function generateCameraDescription(analysis: SceneAnalysis): string {
+  const { cameraType, colorGrading } = analysis.layout;
+
+  if (cameraType === 'night_vision' || colorGrading === 'green_tint') {
+    return 'monochrome green night vision with IR characteristics';
+  }
+
+  if (cameraType === 'black_white' || colorGrading === 'grayscale') {
+    return 'black and white with grayscale tones';
+  }
+
+  // Color grading adaptations
+  const gradingDescriptions: Record<string, string> = {
+    'warm_indoor': 'warm color tones from indoor lighting',
+    'cool_outdoor': 'cool color tones from outdoor light',
+    'neutral': 'balanced color temperature',
+    'green_tint': 'green-tinted monochrome',
+    'grayscale': 'grayscale security footage'
+  };
+
+  return colorGrading ? gradingDescriptions[colorGrading] || 'natural colors' : 'natural colors';
+}
+
+function generatePositionDescription(analysis: SceneAnalysis): string {
+  // Determine best position based on scene analysis
+  if (analysis.doors.length > 0) {
+    const door = analysis.doors[0];
+    return `${door.position} ${door.type} area`;
+  }
+
+  if (analysis.furniture.length > 0) {
+    return `near ${analysis.furniture[0]}`;
+  }
+
+  return 'natural position in frame';
+}
+
 function interpolateTemplate(template: string, analysis: SceneAnalysis): string {
-  // No more object interpolation - use template as-is to prevent object creation
-  // Add security camera context to every prompt
-  const result = `From your security camera perspective: ${template}`;
+  // Build a comprehensive technical prompt with MANDATORY stealth behavior
+  const lightingDesc = generateLightingDescription(analysis);
+  const cameraDesc = generateCameraDescription(analysis);
+  const positionDesc = generatePositionDescription(analysis);
+
+  // Start with Santa action - emphasize traditional appearance
+  let result = `Santa ${template}`;
+  result += ' (traditional Father Christmas with long white beard, plush red velvet suit, carrying burlap sack)';
+
+  // CRITICAL ADDITIONS - ensure Santa doesn't acknowledge camera
+  result += ', completely unaware camera is recording';
+  result += ', never looking at or toward the camera';
+  result += ', behaving naturally as if no one is watching';
+
+  // Add technical scene matching
+  result += `, ${lightingDesc}`;
+  result += `, ${cameraDesc}`;
+
+  // Add position context if not already specified in template
+  if (!template.includes('doorway') && !template.includes('corner') && !template.includes('left') && !template.includes('right')) {
+    result += `, ${positionDesc}`;
+  }
+
+  // Add integration emphasis
+  result += ', naturally integrated into scene with realistic depth and proportions';
 
   return result;
 }
@@ -245,21 +343,42 @@ function calculateTemplateScore(template: PromptTemplate, analysis: SceneAnalysi
     score += 20;
   }
 
-  // Lighting adjustments
-  switch (analysis.layout.lighting) {
-    case 'bright':
-      score += 5;
-      break;
-    case 'dim':
-      // No change
-      break;
-    case 'dark':
-      if (template.category === 'magical') {
-        score += 10; // Magical prompts work well in dark settings
-      } else {
-        score -= 5;
-      }
-      break;
+  // Boost scores based on new category types and scene characteristics
+  const { lighting, cameraType, colorGrading, sceneType } = analysis.layout;
+
+  // Lighting match templates get bonus for complex lighting
+  if (template.category === 'lighting_match') {
+    if (lighting === 'night' || lighting === 'dark' || lighting === 'dusk') {
+      score += 15; // Critical for difficult lighting
+    } else if (lighting === 'indoor_warm' || lighting === 'indoor_cool') {
+      score += 10; // Important for indoor color matching
+    }
+  }
+
+  // Camera adaptive templates get bonus for non-standard cameras
+  if (template.category === 'camera_adaptive') {
+    if (cameraType === 'night_vision' || colorGrading === 'green_tint') {
+      score += 20; // Essential for night vision
+    } else if (cameraType === 'black_white' || colorGrading === 'grayscale') {
+      score += 15; // Important for B&W
+    } else if (colorGrading && colorGrading !== 'neutral') {
+      score += 10; // Useful for any color grading
+    }
+  }
+
+  // Position-based templates are universally good
+  if (template.category === 'position_based') {
+    score += 5; // Consistent baseline
+    if (sceneType === 'outdoor') {
+      score += 5; // Extra good for outdoor
+    }
+  }
+
+  // General lighting adjustments
+  if (lighting === 'bright' || lighting === 'daylight') {
+    score += 5; // Easier to work with
+  } else if (lighting === 'dark') {
+    score -= 3; // Slightly harder
   }
 
   return Math.max(0, Math.min(100, score));
@@ -327,21 +446,24 @@ export function generateVideoPrompts(
 ): PromptGenerationResult {
   const finalConfig = { ...DEFAULT_CONFIG, ...config };
 
-  // Select templates based on scene type
-  let selectedTemplates: PromptTemplate[];
-  switch (analysis.layout.sceneType) {
-    case 'indoor':
-      selectedTemplates = INDOOR_PROMPT_TEMPLATES;
-      break;
-    case 'outdoor':
-      selectedTemplates = OUTDOOR_PROMPT_TEMPLATES;
-      break;
-    case 'unclear':
-    default:
-      // Use all templates if unclear, with preference for outdoor
-      selectedTemplates = [...OUTDOOR_PROMPT_TEMPLATES, ...INDOOR_PROMPT_TEMPLATES];
-      break;
+  // Select templates based on scene characteristics
+  let selectedTemplates: PromptTemplate[] = [];
+
+  // Add outdoor stealth templates (work for outdoor/unclear scenes)
+  if (analysis.layout.sceneType === 'outdoor' || analysis.layout.sceneType === 'unclear') {
+    selectedTemplates.push(...OUTDOOR_STEALTH_TEMPLATES);
   }
+
+  // Add indoor stealth templates if scene is indoor
+  if (analysis.layout.sceneType === 'indoor' || analysis.layout.sceneType === 'unclear') {
+    selectedTemplates.push(...INDOOR_STEALTH_TEMPLATES);
+  }
+
+  // Always add lighting match templates (especially important for difficult lighting)
+  selectedTemplates.push(...LIGHTING_MATCH_TEMPLATES);
+
+  // Always add camera adaptive templates (important for non-standard cameras)
+  selectedTemplates.push(...CAMERA_ADAPTIVE_TEMPLATES);
 
   // Score and filter templates
   const scoredTemplates = selectedTemplates
@@ -420,7 +542,7 @@ export function generateMorePrompts(
 
   const newPrompts: VideoPrompt[] = [];
 
-  for (const template of PROMPT_TEMPLATES) {
+  for (const template of ALL_TEMPLATES) {
     if (newPrompts.length >= count) break;
 
     const score = calculateTemplateScore(template, analysis);

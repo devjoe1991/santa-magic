@@ -5,7 +5,7 @@ export interface VideoPrompt {
   tags: string[];
   confidence: number; // 0-100 based on how well it matches the scene
   elements: string[]; // Scene elements used in this prompt
-  category: 'entrance' | 'delivery' | 'magical' | 'interactive' | 'departure';
+  category: 'lighting_match' | 'position_based' | 'camera_adaptive' | 'entrance' | 'delivery' | 'magical' | 'interactive' | 'departure';
   duration?: 'quick' | 'medium' | 'lingering'; // Suggested video duration style
 }
 

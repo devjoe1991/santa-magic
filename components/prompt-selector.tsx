@@ -26,6 +26,9 @@ function PromptCard({ prompt, isSelected, onSelect, onEdit, isSelecting = false,
 
   const getCategoryIcon = (category: VideoPrompt['category']) => {
     switch (category) {
+      case 'lighting_match': return '💡';
+      case 'position_based': return '📍';
+      case 'camera_adaptive': return '📹';
       case 'entrance': return '🚪';
       case 'delivery': return '🎁';
       case 'magical': return '✨';

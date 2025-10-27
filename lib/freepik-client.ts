@@ -49,7 +49,7 @@ export class FreepikClient {
 
       // Enhance prompt with Christmas magic if requested
       const prompt = options.enhancePrompt
-        ? this.enhancePromptForChristmas(options.prompt)
+        ? this.enhancePromptForChristmas(options.prompt, options.sceneAnalysis)
         : options.prompt;
 
       // Prepare the request
@@ -332,11 +332,15 @@ export class FreepikClient {
       };
     }
 
-    // Handle error status
+    // Handle error status with detailed logging
     if (mappedStatus === 'failed') {
+      // Log the full response to help debug
+      console.error(`Freepik job ${jobId} FAILED. Full response data:`, JSON.stringify(data, null, 2));
+
       result.error = {
-        code: 'generation_failed',
-        message: data.error_message || 'Video generation failed'
+        code: data.error_code || 'generation_failed',
+        message: data.error_message || data.message || 'Video generation failed',
+        details: data.error_details || data.details
       };
     }
 
@@ -372,18 +376,39 @@ export class FreepikClient {
   }
 
   /**
-   * Enhance prompt using proven working formula
+   * Enhance prompt with strict requirements to ensure Santa always appears naturally
    */
-  private enhancePromptForChristmas(originalPrompt: string): string {
-    // Use the exact structure that worked perfectly in manual testing
-    const enhancedPrompt = `Add Santa Claus ${originalPrompt}. Santa should be wearing his traditional red suit with white beard. The camera is static and should not move. Keep the colours subtle to make this look like real security camera footage.`;
+  private enhancePromptForChristmas(originalPrompt: string, sceneAnalysis?: any): string {
+    // Build a concise, focused prompt that won't overwhelm the API
+    let enhanced = `Security camera footage. ${originalPrompt}. `;
+
+    // Core Santa appearance - CONCISE but specific
+    enhanced += `Traditional Father Christmas: plush red velvet suit, white fur trim, long white beard, rosy cheeks. `;
+    enhanced += `Carrying large burlap sack of presents (NOT shopping bag). `;
+    enhanced += `Sneaking stealthily, unaware of camera, never looks at lens. `;
+
+    // Minimal scene adaptation
+    if (sceneAnalysis?.layout) {
+      const { cameraType, colorGrading } = sceneAnalysis.layout;
+
+      if (cameraType === 'night_vision' || colorGrading === 'green_tint') {
+        enhanced += `Green night vision footage style. `;
+      } else if (cameraType === 'black_white' || colorGrading === 'grayscale') {
+        enhanced += `Black and white security camera. `;
+      }
+    }
+
+    // Essential technical requirements - BRIEF
+    enhanced += `Static camera, no movement. Natural shadows. Realistic scale and depth.`;
 
     console.log('Enhanced prompt:', {
       original: originalPrompt.substring(0, 100) + '...',
-      enhanced: enhancedPrompt.substring(0, 200) + '...'
+      enhanced: enhanced.substring(0, 200) + '...',
+      fullLength: enhanced.length,
+      hasSceneAnalysis: !!sceneAnalysis
     });
 
-    return enhancedPrompt;
+    return enhanced;
   }
 
   /**

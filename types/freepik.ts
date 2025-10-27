@@ -86,6 +86,7 @@ export interface VideoGenerationOptions {
   enhancePrompt?: boolean; // Whether to add Christmas enhancements
   aspectRatio?: '16:9' | '9:16' | '1:1';
   cfgScale?: number;
+  sceneAnalysis?: any; // Scene analysis data for smart prompt enhancement
   metadata?: {
     analysisId: string;
     promptId: string;

@@ -114,6 +114,7 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
       prompt: selectedPrompt.prompt_text,
       duration: request.videoDuration || 10,
       enhancePrompt: true,
+      sceneAnalysis: analysisData.analysis_data, // Pass scene analysis for smart enhancement
       metadata: {
         analysisId,
         promptId,
@@ -201,7 +202,7 @@ async function updateOrderProcessingStatus(
 
     // Map camelCase to snake_case for database columns
     if (additionalData?.freepikJobId !== undefined) {
-      updateData.freepik_job_id = additionalData.freepikJobId;
+      updateData.freepik_video_id = additionalData.freepikJobId;
     }
     if (additionalData?.freepikStatus !== undefined) {
       updateData.freepik_status = additionalData.freepikStatus;
