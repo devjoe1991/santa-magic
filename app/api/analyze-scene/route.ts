@@ -30,11 +30,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     let base64Image: string;
     let imageBuffer: Buffer;
     let fileExtension: string;
+    let userContext: string | undefined;
 
     if (contentType.includes("multipart/form-data")) {
       // Handle file upload
       const formData = await request.formData();
       const file = formData.get("image") as File;
+      const contextValue = formData.get("sceneContext");
+      userContext = contextValue ? String(contextValue).trim() : undefined;
 
       if (!file) {
         const errorResponse: EnhancedAnalysisResponse = {
@@ -143,15 +146,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     uploadedImagePath = uploadResult.path;
 
-    // Step 2: Analyze the scene
-    const analysis = await analyzeScene(base64Image);
+    // Step 2: Analyze the scene (with optional user context)
+    const analysis = await analyzeScene(base64Image, userContext);
     const processingTime = Date.now() - startTime;
 
-    // Step 3: Store analysis in database
+    // Step 3: Store analysis in database (with optional user context)
     const storeResult = await storeSceneAnalysis(
       analysis,
       uploadedImagePath,
       processingTime,
+      userContext,
     );
 
     if (!storeResult.success) {

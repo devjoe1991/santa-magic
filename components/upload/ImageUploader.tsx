@@ -21,6 +21,8 @@ interface ImageUploaderProps {
   onTestGeneration?: () => void;
   isProcessing: boolean;
   error?: { message: string } | null;
+  sceneContext?: string;
+  onSceneContextChange?: (context: string) => void;
 }
 
 export default function ImageUploader({
@@ -31,6 +33,8 @@ export default function ImageUploader({
   onTestGeneration,
   isProcessing,
   error,
+  sceneContext = "",
+  onSceneContextChange,
 }: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
 
@@ -90,7 +94,30 @@ export default function ImageUploader({
 
         <ImagePreview file={file} onRemove={onFileRemove} />
 
-        <div className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
+        {/* Scene Context Input - Optional */}
+        <div className="mt-4 space-y-2 sm:mt-6">
+          <label className="flex items-center gap-2 font-body text-sm font-medium text-charcoal">
+            <span className="text-base">📝</span>
+            Scene Context
+            <span className="rounded-full bg-warmGold/20 px-2 py-0.5 text-xs font-normal text-warmGold">
+              Optional
+            </span>
+          </label>
+          <textarea
+            value={sceneContext}
+            onChange={(e) => onSceneContextChange?.(e.target.value)}
+            placeholder="e.g., 'Camera is on back wall. Door is to the left. Don't show Santa coming from below camera as that's a wall.'"
+            rows={2}
+            maxLength={200}
+            className="w-full rounded-lg border-2 border-warmGold/20 bg-snowWhite/50 p-3 font-body text-sm text-charcoal placeholder:text-charcoal/40 focus:border-warmGold/50 focus:outline-none focus:ring-2 focus:ring-warmGold/20 sm:text-base"
+          />
+          <p className="flex items-center gap-1 font-body text-xs text-charcoal/60">
+            <span>💡</span>
+            Help us position Santa correctly by describing your camera location (e.g., "Camera on ceiling", "Doorbell view")
+          </p>
+        </div>
+
+        <div className="mt-4 space-y-3 sm:space-y-4">
           <Button
             onClick={onProceedToPayment}
             disabled={isProcessing}

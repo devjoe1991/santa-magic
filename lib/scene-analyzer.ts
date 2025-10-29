@@ -1,8 +1,20 @@
 import { openai } from './openai-client';
 import { SceneAnalysis } from '@/types/scene-analysis';
 
-export async function analyzeScene(base64Image: string): Promise<SceneAnalysis> {
+export async function analyzeScene(base64Image: string, userContext?: string): Promise<SceneAnalysis> {
   try {
+    // Build the analysis prompt with optional user context prepended
+    let analysisPrompt = `Analyze this camera image for creating a Santa Claus video. I need detailed information about the scene to determine optimal Santa positioning that's clearly visible but naturally placed, not center-stage.`;
+
+    // Prepend user context if provided
+    if (userContext) {
+      analysisPrompt = `USER PROVIDED CONTEXT: "${userContext}"
+
+IMPORTANT: Use this user context when determining santaZones, approachPath, and exitPath. The user knows their camera setup and scene layout - respect their constraints and suggestions about where Santa should or shouldn't appear from.
+
+${analysisPrompt}`;
+    }
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [{
@@ -10,7 +22,7 @@ export async function analyzeScene(base64Image: string): Promise<SceneAnalysis> 
         content: [
           {
             type: "text",
-            text: `Analyze this camera image for creating a Santa Claus video. I need detailed information about the scene to determine optimal Santa positioning that's clearly visible but naturally placed, not center-stage.
+            text: analysisPrompt + `
 
 Please analyze and return ONLY a valid JSON object with this exact structure:
 

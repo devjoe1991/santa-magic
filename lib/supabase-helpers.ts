@@ -57,7 +57,8 @@ export async function uploadImageToStorage(
 export async function storeSceneAnalysis(
   analysis: SceneAnalysis,
   imageStoragePath?: string,
-  processingTimeMs?: number
+  processingTimeMs?: number,
+  userContext?: string
 ): Promise<{ success: boolean; analysisId?: string; error?: string }> {
   try {
     const { data, error } = await supabaseAdmin
@@ -73,7 +74,8 @@ export async function storeSceneAnalysis(
         layout: analysis.layout,
         suitability_score: analysis.suitabilityScore,
         scene_complexity: 'moderate', // Could be calculated from analysis
-        processing_time_ms: processingTimeMs
+        processing_time_ms: processingTimeMs,
+        user_context: userContext // Store optional user-provided context
       })
       .select('id')
       .single();

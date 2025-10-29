@@ -18,6 +18,7 @@ export interface SceneAnalysisDB {
   suitability_score?: number;
   scene_complexity?: 'minimal' | 'moderate' | 'rich';
   processing_time_ms?: number;
+  user_context?: string; // Optional user-provided scene context
 }
 
 export interface VideoPromptDB {

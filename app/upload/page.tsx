@@ -17,6 +17,7 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [showPaymentFlow, setShowPaymentFlow] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [sceneContext, setSceneContext] = useState<string>("");
 
   // Error handling
   const { error, clearError, handleError, isRetrying } = useErrorHandling();
@@ -70,6 +71,9 @@ export default function UploadPage() {
       // First, analyze the scene and create the order
       const formData = new FormData();
       formData.append("image", file);
+      if (sceneContext.trim()) {
+        formData.append("sceneContext", sceneContext.trim());
+      }
 
       const analysisResponse = await fetch("/api/analyze-scene", {
         method: "POST",
@@ -149,6 +153,9 @@ export default function UploadPage() {
       // First, analyze the scene
       const formData = new FormData();
       formData.append("image", file);
+      if (sceneContext.trim()) {
+        formData.append("sceneContext", sceneContext.trim());
+      }
 
       const analysisResponse = await fetch("/api/analyze-scene", {
         method: "POST",
@@ -271,6 +278,8 @@ export default function UploadPage() {
                     onTestGeneration={handleTestGeneration}
                     isProcessing={isProcessingPayment}
                     error={error}
+                    sceneContext={sceneContext}
+                    onSceneContextChange={setSceneContext}
                   />
                 ) : (
                   <PaymentFlow
