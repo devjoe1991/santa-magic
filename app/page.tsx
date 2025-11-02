@@ -12,6 +12,7 @@ export default function Home() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [selectedQuality, setSelectedQuality] = useState<"720p" | "1080p">("720p");
+  const [sceneContext, setSceneContext] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
@@ -97,6 +98,9 @@ export default function Home() {
       // First, analyze the scene and create the order
       const formData = new FormData();
       formData.append("image", file);
+      if (sceneContext.trim()) {
+        formData.append("sceneContext", sceneContext.trim());
+      }
 
       const analysisResponse = await fetch("/api/analyze-scene", {
         method: "POST",
@@ -180,6 +184,9 @@ export default function Home() {
       // First, analyze the scene
       const formData = new FormData();
       formData.append("image", file);
+      if (sceneContext.trim()) {
+        formData.append("sceneContext", sceneContext.trim());
+      }
 
       const analysisResponse = await fetch("/api/analyze-scene", {
         method: "POST",
@@ -397,7 +404,7 @@ export default function Home() {
       </section>
 
       {/* Order Form Section */}
-      <section className="bg-gray-900 py-16">
+      <section id="order-form" className="bg-gray-900 py-16">
         <div className="mx-auto max-w-4xl px-4">
           <h2 className="mb-12 text-center text-3xl font-bold text-white">
             🎅 Create Your Santa Video
@@ -496,6 +503,31 @@ export default function Home() {
                     <option value="720p">720p Video (10 seconds) - £6.99</option>
                     <option value="1080p">1080p Video (10 seconds) - £9.99</option>
                   </select>
+                </div>
+
+                {/* Scene Context - Optional */}
+                <div>
+                  <label htmlFor="sceneContext" className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <span>📝</span>
+                    Scene Context
+                    <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-normal text-yellow-700">
+                      Optional
+                    </span>
+                  </label>
+                  <textarea
+                    id="sceneContext"
+                    name="sceneContext"
+                    value={sceneContext}
+                    onChange={(e) => setSceneContext(e.target.value)}
+                    placeholder="e.g., 'Camera is on back wall. Door is to the left. Don't show Santa coming from below camera as that's a wall.'"
+                    rows={2}
+                    maxLength={200}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                    disabled={isProcessing}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    💡 Help us position Santa correctly by describing your camera location (e.g., "Camera on ceiling", "Doorbell view")
+                  </p>
                 </div>
 
                 {/* Compact File Upload Section */}

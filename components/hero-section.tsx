@@ -56,8 +56,11 @@ export const AuroraHero = () => {
           Upload your doorbell footage, pay £12.50, and watch Santa arrive at your doorstep using AI magic. 
           <span className="block mt-2 font-semibold text-white">Create Christmas memories that last forever!</span>
         </p>
-        <motion.a
-          href="/order"
+        <motion.button
+          onClick={() => {
+            const formSection = document.getElementById('order-form');
+            formSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }}
           style={{
             border,
             boxShadow,
@@ -68,11 +71,11 @@ export const AuroraHero = () => {
           whileTap={{
             scale: 0.985,
           }}
-          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-3 py-2 text-gray-50 transition-colors hover:bg-gray-950/50 sm:px-4 landscape:px-2 landscape:py-1 landscape:text-sm"
+          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-3 py-2 text-gray-50 transition-colors hover:bg-gray-950/50 sm:px-4 landscape:px-2 landscape:py-1 landscape:text-sm cursor-pointer"
         >
           <span className="text-sm sm:text-base landscape:text-xs">🎅 See Santa Today!</span>
           <FiArrowRight className="transition-transform group-hover:-rotate-45 group-active:-rotate-12 text-sm sm:text-base landscape:text-xs" />
-        </motion.a>
+        </motion.button>
       </div>
 
       <div className="absolute inset-0 z-0">
