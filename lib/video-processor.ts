@@ -133,7 +133,21 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
       }
     });
 
-    if (result.success && result.videoUrl) {
+    if (!result.success) {
+      throw new Error(result.error || 'Video generation failed');
+    }
+
+    // Job submitted successfully - jobId is available
+    if (result.jobId && !result.videoUrl) {
+      console.log(`AI video generation job submitted for order: ${orderId}, jobId: ${result.jobId}`);
+      // Video is being processed asynchronously
+      // The processing page will poll for status updates
+      // Background polling will update the order when complete
+      return;
+    }
+
+    // If videoUrl is available (immediate completion - rare case)
+    if (result.videoUrl) {
       // Store the video in Supabase and update order
       const storedVideoUrl = await storeGeneratedVideo(orderId, result.videoUrl);
 
@@ -145,11 +159,8 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
 
       // Send completion notification
       await sendVideoReadyEmail(orderId);
-    } else {
-      throw new Error(result.error || 'Video generation failed');
+      console.log(`AI video generation completed immediately for order: ${orderId}`);
     }
-
-    console.log(`AI video generation completed for order: ${orderId}`);
 
   } catch (error) {
     console.error('AI video generation failed:', error);

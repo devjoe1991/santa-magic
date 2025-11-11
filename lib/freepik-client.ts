@@ -80,14 +80,15 @@ export class FreepikClient {
 
       console.log(`Generation submitted with job ID: ${response.jobId}`);
 
-      // Poll for completion
-      const result = await this.pollForCompletion(response.jobId, options.orderId);
-
+      // Return immediately with job ID - polling will happen separately
+      // The processing page will poll via the status endpoint
       const processingTime = Date.now() - startTime;
-      console.log(`Video generation ${result.success ? 'completed' : 'failed'} in ${processingTime}ms for order: ${options.orderId}`);
+      console.log(`Video generation job submitted in ${processingTime}ms for order: ${options.orderId}`);
 
       return {
-        ...result,
+        success: true,
+        jobId: response.jobId,
+        message: 'Video generation started',
         processingTimeMs: processingTime
       };
 
@@ -390,12 +391,10 @@ export class FreepikClient {
     enhanced += `Santa ALWAYS keeps sack over shoulder or in hand throughout video, NEVER places presents down or sets sack on ground. `;
     enhanced += `Children need to see Santa HOLDING presents. `;
 
-    // CRITICAL MOVEMENT: Forward motion only, no backwards walking
-    enhanced += `Moving purposefully forward in one consistent direction, never walking backwards or reversing. `;
-    enhanced += `Confident, deliberate forward motion throughout entire video. `;
-    enhanced += `Santa walks naturally forward, unaware of camera, never looks at lens. `;
-    enhanced += `CRITICAL: Santa maintains forward walking direction throughout entire video, NEVER walks backwards or reverses course. `;
-    enhanced += `Forward-facing movement only, no backing up, no turning around mid-walk. `;
+    // CRITICAL MOVEMENT: Simple, clear direction instruction
+    enhanced += `Santa walks in one steady direction across frame, smooth continuous forward motion only. `;
+    enhanced += `Consistent smooth trajectory throughout. `;
+    enhanced += `Unaware of camera, never looks at lens. `;
 
     // Minimal scene adaptation
     if (sceneAnalysis?.layout) {
