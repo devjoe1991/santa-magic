@@ -42,16 +42,16 @@ export default function Footer() {
                 <div className="mb-6 flex items-center gap-3">
                   <div className="text-4xl">🎅</div>
                   <div>
-                    <span className="text-glow block font-heading text-3xl font-bold text-snowWhite">
+                    <span className="text-glow block font-display text-hero font-bold text-snowWhite">
                       Seasonal Santa
                     </span>
-                    <span className="font-body text-sm text-snowWhite/70">
+                    <span className="font-body text-small text-snowWhite/70">
                       Doorbell Magic
                     </span>
                   </div>
                 </div>
               </Link>
-              <p className="mb-6 font-body text-lg leading-relaxed text-snowWhite/80">
+              <p className="mb-6 font-body text-body leading-relaxed text-snowWhite/80">
                 Bring the magic of Christmas to your doorstep with personalised
                 Santa videos powered by cutting-edge AI technology. It&apos;s
                 absolutely brilliant!
@@ -60,12 +60,12 @@ export default function Footer() {
               {/* Trust Badges */}
               <div className="flex space-x-4">
                 <div className="rounded-full border border-snowWhite/20 bg-snowWhite/10 px-3 py-2 backdrop-blur">
-                  <span className="font-body text-xs text-snowWhite/90">
+                  <span className="font-body text-small text-snowWhite/90">
                     🔒 Secure Payments
                   </span>
                 </div>
                 <div className="rounded-full border border-snowWhite/20 bg-snowWhite/10 px-3 py-2 backdrop-blur">
-                  <span className="font-body text-xs text-snowWhite/90">
+                  <span className="font-body text-small text-snowWhite/90">
                     ⚡ Fast Delivery
                   </span>
                 </div>
@@ -74,14 +74,14 @@ export default function Footer() {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-glow mb-6 font-heading text-xl font-bold text-snowWhite">
+              <h3 className="text-glow mb-6 font-display text-title font-bold text-snowWhite">
                 Quick Links
               </h3>
               <ul className="space-y-3">
                 <li>
                   <Link
                     href="/how-it-works"
-                    className="inline-block font-body text-lg text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
+                    className="inline-block font-body text-body text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
                   >
                     How It Works
                   </Link>
@@ -89,7 +89,7 @@ export default function Footer() {
                 <li>
                   <Link
                     href="/faq"
-                    className="inline-block font-body text-lg text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
+                    className="inline-block font-body text-body text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
                   >
                     FAQ
                   </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
                 <li>
                   <Link
                     href="/upload"
-                    className="inline-block font-body text-lg text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
+                    className="inline-block font-body text-body text-snowWhite/80 transition-all duration-300 hover:translate-x-1 hover:text-warmGold"
                   >
                     Upload Video
                   </Link>
@@ -107,7 +107,7 @@ export default function Footer() {
 
             {/* Service Info */}
             <div>
-              <h3 className="text-glow mb-6 font-heading text-xl font-bold text-snowWhite">
+              <h3 className="text-glow mb-6 font-display text-title font-bold text-snowWhite">
                 Service Info
               </h3>
               <ul className="space-y-3">
@@ -135,10 +135,10 @@ export default function Footer() {
               <div className="mt-6">
                 <Link
                   href="/upload"
-                  className="group inline-flex items-center whitespace-nowrap rounded-xl bg-warmGold px-4 py-3 font-bold text-charcoal shadow-gold transition-all duration-300 hover:bg-warmGold/90 sm:px-6 lg:px-8"
+                  className="group inline-flex items-center whitespace-nowrap rounded-xl bg-warmGold px-4 py-3 font-display font-bold text-charcoal shadow-gold transition-all duration-300 hover:bg-warmGold/90 sm:px-6 lg:px-8"
                 >
-                  <span className="mr-2 text-base sm:text-lg">🎅</span>
-                  <span className="text-sm sm:text-base">See Santa Today!</span>
+                  <span className="mr-2 text-body-sm sm:text-body">🎅</span>
+                  <span className="text-body-sm sm:text-body">See Santa Today!</span>
                 </Link>
               </div>
             </div>
@@ -154,11 +154,11 @@ export default function Footer() {
 
           {/* Bottom Section */}
           <div className="flex flex-col items-center justify-between sm:flex-row">
-            <span className="mb-4 font-body text-snowWhite/80 sm:mb-0">
+            <span className="mb-4 font-body text-body-sm text-snowWhite/80 sm:mb-0">
               © {new Date().getFullYear()} Seasonal Santa. All Rights Reserved.
             </span>
             <div className="flex items-center space-x-6">
-              <span className="font-body text-snowWhite/60">
+              <span className="font-body text-body-sm text-snowWhite/60">
                 🎄 Made with Christmas Magic
               </span>
               <div className="flex space-x-2">

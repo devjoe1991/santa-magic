@@ -93,12 +93,16 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
       throw new Error('No image storage path found');
     }
 
+    // Extract user context from analysis data
+    const userContext = analysisData.user_context || undefined;
+
     // Prepare video generation request
     const videoGenRequest = {
       orderId,
       imageUrl,
       prompt: selectedPrompt.prompt_text,
       sceneAnalysis: analysisData.analysis_data,
+      userContext,
       metadata: {
         analysisId,
         promptId,
@@ -106,6 +110,11 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
         confidenceScore: selectedPrompt.confidence_score
       }
     };
+
+    // Log if user context is being used
+    if (userContext) {
+      console.log(`User context found for order ${orderId}:`, userContext.substring(0, 100));
+    }
 
     // Call Freepik Kling 2.1 API for video generation
     const result = await generateSantaVideoWithFreepik({
@@ -115,6 +124,7 @@ async function triggerAIVideoGeneration(request: VideoProcessingRequest): Promis
       duration: request.videoDuration || 10,
       enhancePrompt: true,
       sceneAnalysis: analysisData.analysis_data, // Pass scene analysis for smart enhancement
+      userContext, // Pass user-provided constraints
       metadata: {
         analysisId,
         promptId,

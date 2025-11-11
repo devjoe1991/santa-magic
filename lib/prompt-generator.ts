@@ -20,155 +20,155 @@ const DEFAULT_CONFIG: PromptGeneratorConfig = {
 // Outdoor stealth - Santa leaving after delivery
 const OUTDOOR_STEALTH_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-sneaking-left',
+    id: 'santa-moving-left',
     category: 'position_based',
-    baseDescription: 'Santa sneaking away to the left',
+    baseDescription: 'Santa moving purposefully to the left',
     requiredElements: [],
     optionalElements: ['doors'],
     confidence: 98,
     variations: [
-      'sneaking away to the left after his delivery, checking over shoulder with Santa sack',
-      'carefully creeping away from doorway to the left, trying not to make noise with his sack',
-      'tiptoeing away to the left side with lighter sack over shoulder, mission accomplished',
-      'quietly departing to the left with burlap sack, glancing back to make sure he wasn\'t seen'
+      'walking steadily away to the left after his delivery, maintaining forward momentum with Santa sack',
+      'moving confidently from doorway to the left, proceeding with purpose with his sack',
+      'striding away to the left side with lighter sack over shoulder, mission accomplished',
+      'departing purposefully to the left with burlap sack, heading to his next stop'
     ]
   },
   {
-    id: 'santa-sneaking-right',
+    id: 'santa-moving-right',
     category: 'position_based',
-    baseDescription: 'Santa sneaking away to the right',
+    baseDescription: 'Santa moving purposefully to the right',
     requiredElements: [],
     optionalElements: ['doors'],
     confidence: 98,
     variations: [
-      'sneaking away to the right after delivering presents, moving stealthily with sack',
-      'carefully creeping away from entrance to the right with Santa sack over shoulder',
-      'tiptoeing away to the right side with burlap sack, trying to leave undetected',
-      'quietly departing to the right with his sack, staying low and cautious'
+      'walking steadily to the right after delivering presents, moving confidently with sack',
+      'striding away from entrance to the right with Santa sack over shoulder',
+      'proceeding to the right side with burlap sack, continuing his journey',
+      'departing to the right with his sack, moving with purpose'
     ]
   },
   {
-    id: 'santa-doorway-stealth',
+    id: 'santa-doorway-passage',
     category: 'position_based',
-    baseDescription: 'Santa moving stealthily through doorway',
+    baseDescription: 'Santa moving purposefully through doorway',
     requiredElements: ['doors'],
     optionalElements: [],
     confidence: 96,
     variations: [
-      'sneaking through the doorway with sack of presents, trying not to be seen',
-      'carefully moving through entrance while carrying Santa sack, very quiet',
-      'tiptoeing through doorway with burlap sack, checking if anyone is around',
-      'quietly passing through entrance with his sack over shoulder, being extra cautious'
+      'walking through the doorway with sack of presents, proceeding forward',
+      'moving through entrance while carrying Santa sack, heading onward',
+      'passing through doorway with burlap sack, continuing forward',
+      'striding through entrance with his sack over shoulder, moving confidently'
     ]
   },
   {
-    id: 'santa-corner-hiding',
+    id: 'santa-corner-passing',
     category: 'position_based',
-    baseDescription: 'Santa hiding near corner/edge',
+    baseDescription: 'Santa moving along corner/edge',
     requiredElements: [],
     optionalElements: [],
     confidence: 92,
     variations: [
-      'peeking around the corner with burlap sack, checking if coast is clear',
-      'hiding near the edge while carrying Santa sack, trying to stay out of sight',
-      'crouching in corner area with sack of presents, attempting to be stealthy',
-      'pressing against wall with his sack, trying not to be noticed'
+      'walking along the corner with burlap sack, moving forward naturally',
+      'passing near the edge while carrying Santa sack, proceeding onward',
+      'moving through corner area with sack of presents, maintaining forward motion',
+      'striding along wall with his sack, continuing his route'
     ]
   },
   {
-    id: 'santa-departing-stealthy',
+    id: 'santa-departing-purposefully',
     category: 'position_based',
-    baseDescription: 'Santa stealthily departing after delivery',
+    baseDescription: 'Santa purposefully departing after delivery',
     requiredElements: [],
     optionalElements: [],
     confidence: 94,
     variations: [
-      'sneaking away from this location after completing his delivery with emptier sack',
-      'carefully departing with lighter Santa sack over shoulder, job well done',
-      'tiptoeing away having successfully delivered all presents, carrying his burlap sack',
-      'quietly leaving the scene with sack in hand, checking no one noticed him'
+      'walking away from this location after completing his delivery with emptier sack',
+      'departing confidently with lighter Santa sack over shoulder, job well done',
+      'striding away having successfully delivered all presents, carrying his burlap sack',
+      'leaving the scene with sack in hand, moving on to his next stop'
     ]
   }
 ];
 
-// Indoor stealth - Santa during delivery
+// Indoor movement - Santa during delivery
 const INDOOR_STEALTH_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-indoor-tree-stealth',
+    id: 'santa-indoor-tree-approach',
     category: 'position_based',
-    baseDescription: 'Santa sneaking toward Christmas tree',
+    baseDescription: 'Santa moving toward Christmas tree',
     requiredElements: ['decorations'],
     optionalElements: ['lights'],
     confidence: 98,
     variations: [
-      'tiptoeing toward the Christmas tree with Santa sack, trying not to wake anyone',
-      'sneaking carefully to the tree while carrying sack of presents, finger to lips',
-      'creeping toward Christmas tree with burlap sack over shoulder, moving very slowly and quietly',
-      'quietly approaching the tree with his sack, being extremely careful'
+      'walking steadily toward the Christmas tree with Santa sack, moving with purpose',
+      'approaching the tree while carrying sack of presents, proceeding forward',
+      'moving toward Christmas tree with burlap sack over shoulder, maintaining forward motion',
+      'walking to the tree with his sack, advancing naturally'
     ]
   },
   {
-    id: 'santa-indoor-furniture-stealth',
+    id: 'santa-indoor-furniture-navigation',
     category: 'position_based',
-    baseDescription: 'Santa sneaking past furniture',
+    baseDescription: 'Santa moving past furniture',
     requiredElements: ['furniture'],
     optionalElements: [],
     confidence: 94,
     variations: [
-      'tiptoeing carefully past furniture while carrying sack of presents',
-      'sneaking around the furniture with Santa sack, trying not to bump anything',
-      'creeping past furniture holding burlap sack, moving extra quietly',
-      'carefully navigating around furniture with his sack over shoulder, being very cautious'
+      'walking past furniture while carrying sack of presents, continuing forward',
+      'moving around the furniture with Santa sack, progressing onward',
+      'passing furniture holding burlap sack, maintaining direction',
+      'navigating around furniture with his sack over shoulder, moving naturally'
     ]
   },
   {
-    id: 'santa-indoor-hallway-stealth',
+    id: 'santa-indoor-hallway-movement',
     category: 'position_based',
-    baseDescription: 'Santa moving stealthily through indoor space',
+    baseDescription: 'Santa moving through indoor space',
     requiredElements: [],
     optionalElements: [],
     confidence: 90,
     variations: [
-      'tiptoeing through the room with Santa sack, trying to stay quiet',
-      'sneaking carefully through the space while carrying sack of presents',
-      'creeping through the area with burlap sack over shoulder, checking no one is awake',
-      'quietly moving through the room with his sack, being extra stealthy'
+      'walking through the room with Santa sack, proceeding forward',
+      'moving through the space while carrying sack of presents, continuing onward',
+      'passing through the area with burlap sack over shoulder, maintaining forward motion',
+      'striding through the room with his sack, moving confidently'
     ]
   }
 ];
 
-// Lighting templates with stealth language
+// Lighting templates with natural movement
 const LIGHTING_MATCH_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-lighting-stealth',
+    id: 'santa-lighting-natural',
     category: 'lighting_match',
-    baseDescription: 'Santa sneaking while matching lighting',
+    baseDescription: 'Santa moving naturally while matching lighting',
     requiredElements: [],
     optionalElements: [],
     confidence: 93,
     variations: [
-      'sneaking through scene with lighting matching ambient environment',
-      'moving stealthily with natural shadows adjusted to scene',
-      'creeping carefully with illumination matching surroundings',
-      'tiptoeing quietly with realistic lighting matching scene conditions'
+      'walking through scene with lighting matching ambient environment',
+      'moving naturally with shadows adjusted to scene',
+      'proceeding forward with illumination matching surroundings',
+      'striding confidently with realistic lighting matching scene conditions'
     ]
   }
 ];
 
-// Camera templates with stealth language
+// Camera templates with natural movement
 const CAMERA_ADAPTIVE_TEMPLATES: PromptTemplate[] = [
   {
-    id: 'santa-camera-stealth',
+    id: 'santa-camera-natural',
     category: 'camera_adaptive',
-    baseDescription: 'Santa sneaking adapted to camera type',
+    baseDescription: 'Santa moving naturally adapted to camera type',
     requiredElements: [],
     optionalElements: [],
     confidence: 92,
     variations: [
-      'sneaking through scene with appearance matching security camera footage',
-      'moving stealthily with color grading matching camera characteristics',
-      'creeping carefully with visual style matching doorbell camera',
-      'tiptoeing quietly with aesthetic matching surveillance footage'
+      'walking through scene with appearance matching security camera footage',
+      'moving naturally with color grading matching camera characteristics',
+      'proceeding forward with visual style matching doorbell camera',
+      'striding confidently with aesthetic matching surveillance footage'
     ]
   }
 ];

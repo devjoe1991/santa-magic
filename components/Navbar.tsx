@@ -58,13 +58,13 @@ const Navbar = () => {
             <div className="flex flex-col">
               <span
                 className={cn(
-                  "text-glow font-heading font-bold text-christmasRed transition-all duration-300",
-                  scrolled ? "text-lg sm:text-xl" : "text-xl sm:text-2xl",
+                  "text-glow font-display font-bold text-christmasRed transition-all duration-300",
+                  scrolled ? "text-body-lg sm:text-title" : "text-title sm:text-subtitle",
                 )}
               >
                 Seasonal Santa
               </span>
-              <span className="-mt-1 font-body text-xs text-charcoal/60">
+              <span className="-mt-1 font-body text-small text-charcoal/60">
                 Doorbell Magic
               </span>
             </div>
@@ -89,29 +89,29 @@ const Navbar = () => {
                 <>
                   <Link
                     href="/how-it-works"
-                    className="group relative px-3 py-2 font-body font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
+                    className="group relative px-3 py-2 font-body text-body-sm font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
                   >
                     How It Works
                     <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                   <Link
                     href="/faq"
-                    className="group relative px-3 py-2 font-body font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
+                    className="group relative px-3 py-2 font-body text-body-sm font-medium text-charcoal/80 transition-all duration-300 hover:text-christmasRed"
                   >
                     FAQ
                     <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-christmasRed transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                   <Link
                     className={cn(
-                      "btn-vibrant btn-magnetic group relative overflow-hidden whitespace-nowrap rounded-xl font-bold text-white transition-all duration-300",
+                      "btn-vibrant btn-magnetic group relative overflow-hidden whitespace-nowrap rounded-xl font-display font-bold text-white transition-all duration-300",
                       scrolled
-                        ? "px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm lg:px-6 lg:py-2 lg:text-base"
-                        : "px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base lg:px-8 lg:py-3 lg:text-lg",
+                        ? "px-3 py-1.5 text-small sm:px-4 sm:py-2 sm:text-body-sm lg:px-6 lg:py-2 lg:text-body"
+                        : "px-4 py-2 text-body-sm sm:px-6 sm:py-3 sm:text-body lg:px-8 lg:py-3 lg:text-body-lg",
                     )}
                     href="/upload"
                   >
                     <span className="shimmer absolute inset-0 opacity-0 group-hover:opacity-100" />
-                    <span className="mr-1 text-sm sm:mr-2 sm:text-lg lg:text-xl">
+                    <span className="mr-1 text-body-sm sm:mr-2 sm:text-body-lg lg:text-title">
                       🎅
                     </span>
                     <span className="relative z-10">See Santa Today!</span>

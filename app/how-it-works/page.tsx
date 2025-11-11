@@ -15,10 +15,10 @@ export default function HowItWorksPage() {
       <MaxWidthWrapper className="mt-10 flex flex-col items-center justify-center text-center sm:mt-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-heading font-bold text-charcoal sm:text-5xl">
+          <h1 className="font-display text-display lg:text-display-lg font-bold text-charcoal">
             How <span className="text-christmasRed">Santa Doorbell Magic</span> Works
           </h1>
-          <p className="mt-4 text-lg text-charcoal/70 font-body max-w-3xl">
+          <p className="mt-4 font-body text-body lg:text-body-lg text-charcoal/70 max-w-3xl">
             Transform your ordinary doorbell footage into magical Christmas memories in just three simple steps
           </p>
         </div>
@@ -29,16 +29,16 @@ export default function HowItWorksPage() {
           <div className="flex flex-col lg:flex-row items-center gap-8">
             <div className="flex-1">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-heading font-bold text-xl">
+                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-display font-bold text-title">
                   1
                 </div>
-                <h2 className="text-3xl font-heading font-bold text-charcoal">Upload Your Video</h2>
+                <h2 className="font-display text-hero lg:text-hero-lg font-bold text-charcoal">Upload Your Video</h2>
               </div>
-              <p className="text-lg text-charcoal/70 font-body mb-6">
-                Simply upload your doorbell footage (MP4, MOV, or AVI format). Our system accepts videos up to 100MB 
+              <p className="font-body text-body lg:text-body-lg text-charcoal/70 mb-6">
+                Simply upload your doorbell footage (MP4, MOV, or AVI format). Our system accepts videos up to 100MB
                 and works best with clear, well-lit footage of your doorway.
               </p>
-              <ul className="space-y-2 text-charcoal/70 font-body">
+              <ul className="space-y-2 font-body text-body text-charcoal/70">
                 <li>• Drag and drop or click to browse</li>
                 <li>• Maximum file size: 100MB</li>
                 <li>• Recommended duration: 5-30 seconds</li>
@@ -48,10 +48,10 @@ export default function HowItWorksPage() {
             <div className="flex-1 flex justify-center">
               <Card className="p-8 bg-cream border-2 border-warmGold/20 shadow-frost max-w-md">
                 <Upload className="w-16 h-16 text-christmasRed mx-auto mb-4" />
-                <CardTitle className="text-xl font-heading text-christmasRed text-center mb-2">
+                <CardTitle className="font-display text-title text-christmasRed text-center mb-2">
                   Easy Upload
                 </CardTitle>
-                <CardDescription className="text-charcoal/70 font-body text-center">
+                <CardDescription className="font-body text-body text-charcoal/70 text-center">
                   Just drag your video file into the upload area or click to browse your files
                 </CardDescription>
               </Card>
@@ -62,16 +62,16 @@ export default function HowItWorksPage() {
           <div className="flex flex-col lg:flex-row-reverse items-center gap-8">
             <div className="flex-1">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-heading font-bold text-xl">
+                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-display font-bold text-title">
                   2
                 </div>
-                <h2 className="text-3xl font-heading font-bold text-charcoal">Secure Payment</h2>
+                <h2 className="font-display text-hero lg:text-hero-lg font-bold text-charcoal">Secure Payment</h2>
               </div>
-              <p className="text-lg text-charcoal/70 font-body mb-6">
-                Pay securely with Stripe for just £12.50. Your payment is processed safely and your video 
+              <p className="font-body text-body lg:text-body-lg text-charcoal/70 mb-6">
+                Pay securely with Stripe for just £12.50. Your payment is processed safely and your video
                 processing begins immediately after payment confirmation.
               </p>
-              <ul className="space-y-2 text-charcoal/70 font-body">
+              <ul className="space-y-2 font-body text-body text-charcoal/70">
                 <li>• Secure payment via Stripe</li>
                 <li>• One-time payment of £12.50</li>
                 <li>• Instant processing after payment</li>
@@ -81,10 +81,10 @@ export default function HowItWorksPage() {
             <div className="flex-1 flex justify-center">
               <Card className="p-8 bg-cream border-2 border-warmGold/20 shadow-frost max-w-md">
                 <CreditCard className="w-16 h-16 text-christmasRed mx-auto mb-4" />
-                <CardTitle className="text-xl font-heading text-christmasRed text-center mb-2">
+                <CardTitle className="font-display text-title text-christmasRed text-center mb-2">
                   Safe & Secure
                 </CardTitle>
-                <CardDescription className="text-charcoal/70 font-body text-center">
+                <CardDescription className="font-body text-body text-charcoal/70 text-center">
                   Your payment is processed securely through Stripe with industry-standard encryption
                 </CardDescription>
               </Card>
@@ -95,16 +95,16 @@ export default function HowItWorksPage() {
           <div className="flex flex-col lg:flex-row items-center gap-8">
             <div className="flex-1">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-heading font-bold text-xl">
+                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-display font-bold text-title">
                   3
                 </div>
-                <h2 className="text-3xl font-heading font-bold text-charcoal">AI Magic Happens</h2>
+                <h2 className="font-display text-hero lg:text-hero-lg font-bold text-charcoal">AI Magic Happens</h2>
               </div>
-              <p className="text-lg text-charcoal/70 font-body mb-6">
-                Our advanced AI technology processes your video, seamlessly overlaying Santa Claus delivering 
+              <p className="font-body text-body lg:text-body-lg text-charcoal/70 mb-6">
+                Our advanced AI technology processes your video, seamlessly overlaying Santa Claus delivering
                 a present to your doorstep. The entire process takes just a few minutes.
               </p>
-              <ul className="space-y-2 text-charcoal/70 font-body">
+              <ul className="space-y-2 font-body text-body text-charcoal/70">
                 <li>• Advanced AI video processing</li>
                 <li>• Realistic Santa overlay</li>
                 <li>• Processing time: 2-5 minutes</li>
@@ -114,10 +114,10 @@ export default function HowItWorksPage() {
             <div className="flex-1 flex justify-center">
               <Card className="p-8 bg-cream border-2 border-warmGold/20 shadow-frost max-w-md">
                 <Sparkles className="w-16 h-16 text-christmasRed mx-auto mb-4" />
-                <CardTitle className="text-xl font-heading text-christmasRed text-center mb-2">
+                <CardTitle className="font-display text-title text-christmasRed text-center mb-2">
                   AI Processing
                 </CardTitle>
-                <CardDescription className="text-charcoal/70 font-body text-center">
+                <CardDescription className="font-body text-body text-charcoal/70 text-center">
                   Our AI seamlessly integrates Santa into your footage for a magical result
                 </CardDescription>
               </Card>
@@ -128,16 +128,16 @@ export default function HowItWorksPage() {
           <div className="flex flex-col lg:flex-row-reverse items-center gap-8">
             <div className="flex-1">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-heading font-bold text-xl">
+                <div className="w-12 h-12 bg-christmasRed text-white rounded-full flex items-center justify-center font-display font-bold text-title">
                   4
                 </div>
-                <h2 className="text-3xl font-heading font-bold text-charcoal">Receive Your Magic</h2>
+                <h2 className="font-display text-hero lg:text-hero-lg font-bold text-charcoal">Receive Your Magic</h2>
               </div>
-              <p className="text-lg text-charcoal/70 font-body mb-6">
-                Get your personalized Santa video delivered directly to your email within minutes. 
+              <p className="font-body text-body lg:text-body-lg text-charcoal/70 mb-6">
+                Get your personalized Santa video delivered directly to your email within minutes.
                 Download and share your magical Christmas memory with family and friends!
               </p>
-              <ul className="space-y-2 text-charcoal/70 font-body">
+              <ul className="space-y-2 font-body text-body text-charcoal/70">
                 <li>• Email delivery within minutes</li>
                 <li>• Secure download link</li>
                 <li>• High-quality video file</li>

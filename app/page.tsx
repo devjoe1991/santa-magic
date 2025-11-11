@@ -254,8 +254,10 @@ export default function Home() {
       // Store order ID and redirect to processing page
       sessionStorage.setItem("currentOrderId", orderResult.orderId);
       window.location.href = `/processing?orderId=${orderResult.orderId}`;
+      // Don't reset processing state - navigation will clear the page anyway
     } catch (error) {
       console.error("Test generation failed:", error);
+      setIsProcessing(false); // Only reset state on error
       handleError(
         createError.generic(
           error instanceof Error
@@ -264,8 +266,6 @@ export default function Home() {
         ),
         "test",
       );
-    } finally {
-      setIsProcessing(false);
     }
   };
   return (
@@ -273,31 +273,31 @@ export default function Home() {
       <AuroraHero />
 
       {/* Scrolling Text Section - Overlapping Hero */}
-      <section className="relative z-20 -mt-8 -skew-y-3 transform overflow-hidden bg-gradient-to-r from-red-500 to-green-500 py-3">
+      <section className="relative z-20 -mt-8 -skew-y-3 transform overflow-hidden bg-gradient-to-r from-christmasRed to-evergreen py-3">
         <div className="animate-scroll flex">
           <div className="flex items-center space-x-12 whitespace-nowrap">
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
-            <span className="font-serif text-2xl font-bold text-white drop-shadow-lg">
+            <span className="font-festive text-subtitle font-bold text-white drop-shadow-lg">
               🎄 Merry Christmas 🎄
             </span>
           </div>
@@ -307,19 +307,19 @@ export default function Home() {
       {/* Carousel Section */}
       <section className="bg-black py-16">
         <div className="mx-auto max-w-7xl px-4">
-          <h2 className="mb-12 text-center text-3xl font-bold text-white">
+          <h2 className="mb-12 text-center font-display text-hero lg:text-hero-lg font-bold text-white">
             🎅 See the Magic in Action
           </h2>
 
           {/* Step Cards */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {/* Step 1 - Upload */}
-            <div className="relative rounded-xl border border-blue-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-blue-400/60">
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-blue-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+            <div className="relative rounded-xl border border-warmGold/30 bg-gray-900 p-8 shadow-frost transition-all duration-300 hover:border-warmGold/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-warmGold/10 via-christmasRed/10 to-warmGold/10 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
               <div className="relative z-10">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-blue-400">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-warmGold shadow-gold">
                   <svg
-                    className="h-8 w-8 text-blue-400"
+                    className="h-8 w-8 text-warmGold"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -332,10 +332,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                <h3 className="mb-4 text-center font-display text-title font-bold text-white">
                   Step 1: Upload
                 </h3>
-                <p className="text-center leading-relaxed text-gray-300">
+                <p className="text-center font-body text-body leading-relaxed text-gray-300">
                   Upload a screenshot from your doorbell camera. Our AI will analyze the
                   perfect spot for Santa&apos;s arrival.
                 </p>
@@ -343,12 +343,12 @@ export default function Home() {
             </div>
 
             {/* Step 2 - Wait */}
-            <div className="relative rounded-xl border border-green-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-green-400/60">
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-400/20 via-blue-400/20 to-green-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+            <div className="relative rounded-xl border border-evergreen/30 bg-gray-900 p-8 shadow-frost transition-all duration-300 hover:border-evergreen/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-evergreen/10 via-frostBlue/10 to-evergreen/10 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
               <div className="relative z-10">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-green-400">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-evergreen">
                   <svg
-                    className="h-8 w-8 text-green-400"
+                    className="h-8 w-8 text-evergreen"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -361,10 +361,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                <h3 className="mb-4 text-center font-display text-title font-bold text-white">
                   Step 2: Wait
                 </h3>
-                <p className="text-center leading-relaxed text-gray-300">
+                <p className="text-center font-body text-body leading-relaxed text-gray-300">
                   Our AI works its magic behind the scenes. Processing typically
                   takes just a few minutes.
                 </p>
@@ -372,12 +372,12 @@ export default function Home() {
             </div>
 
             {/* Step 3 - Receive */}
-            <div className="relative rounded-xl border border-purple-400/30 bg-gray-900 p-8 shadow-lg transition-all duration-300 hover:border-purple-400/60">
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-purple-400/20 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
+            <div className="relative rounded-xl border border-christmasRed/30 bg-gray-900 p-8 shadow-glow transition-all duration-300 hover:border-christmasRed/60">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-christmasRed/10 via-warmGold/10 to-christmasRed/10 opacity-0 transition-opacity duration-300 hover:opacity-100"></div>
               <div className="relative z-10">
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-purple-400">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-christmasRed shadow-glow">
                   <svg
-                    className="h-8 w-8 text-purple-400"
+                    className="h-8 w-8 text-christmasRed"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -390,10 +390,10 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-4 text-center text-2xl font-bold text-white">
+                <h3 className="mb-4 text-center font-display text-title font-bold text-white">
                   Step 3: Receive
                 </h3>
-                <p className="text-center leading-relaxed text-gray-300">
+                <p className="text-center font-body text-body leading-relaxed text-gray-300">
                   Get your magical Santa video delivered directly to your email.
                   Share the Christmas magic!
                 </p>
@@ -406,14 +406,14 @@ export default function Home() {
       {/* Order Form Section */}
       <section id="order-form" className="bg-gray-900 py-16">
         <div className="mx-auto max-w-4xl px-4">
-          <h2 className="mb-12 text-center text-3xl font-bold text-white">
+          <h2 className="mb-12 text-center font-display text-hero lg:text-hero-lg font-bold text-white">
             🎅 Create Your Santa Video
           </h2>
 
           <div className="relative overflow-hidden rounded-2xl bg-white p-8 shadow-xl">
             {/* Animated Border Beam */}
             <div className="absolute inset-0 rounded-2xl">
-              <div className="absolute inset-0 animate-pulse rounded-2xl bg-gradient-to-r from-red-500/20 via-green-500/20 to-red-500/20"></div>
+              <div className="absolute inset-0 animate-pulse rounded-2xl bg-gradient-to-r from-christmasRed/20 via-evergreen/20 to-christmasRed/20"></div>
             </div>
 
             <div className="relative z-10">
@@ -423,7 +423,7 @@ export default function Home() {
                   <div>
                     <label
                       htmlFor="firstName"
-                      className="mb-2 block text-sm font-medium text-gray-700"
+                      className="mb-2 block font-body text-small font-medium text-charcoal"
                     >
                       First Name
                     </label>
@@ -433,7 +433,7 @@ export default function Home() {
                       name="firstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg border-2 border-warmGold/20 px-4 py-3 font-body text-body transition-colors focus:border-christmasRed focus:ring-2 focus:ring-christmasRed/20"
                       placeholder="Enter your first name"
                       required
                       disabled={isProcessing}
@@ -442,7 +442,7 @@ export default function Home() {
                   <div>
                     <label
                       htmlFor="lastName"
-                      className="mb-2 block text-sm font-medium text-gray-700"
+                      className="mb-2 block font-body text-small font-medium text-charcoal"
                     >
                       Last Name
                     </label>
@@ -452,7 +452,7 @@ export default function Home() {
                       name="lastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg border-2 border-warmGold/20 px-4 py-3 font-body text-body transition-colors focus:border-christmasRed focus:ring-2 focus:ring-christmasRed/20"
                       placeholder="Enter your last name"
                       required
                       disabled={isProcessing}
@@ -464,7 +464,7 @@ export default function Home() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-700"
+                    className="mb-2 block font-body text-small font-medium text-charcoal"
                   >
                     Email Address
                   </label>
@@ -474,12 +474,12 @@ export default function Home() {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg border-2 border-warmGold/20 px-4 py-3 font-body text-body transition-colors focus:border-christmasRed focus:ring-2 focus:ring-christmasRed/20"
                     placeholder="your.email@example.com"
                     required
                     disabled={isProcessing}
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 font-body text-small text-charcoal/60">
                     We&apos;ll send your magical Santa video to this email address
                   </p>
                 </div>
@@ -488,7 +488,7 @@ export default function Home() {
                 <div>
                   <label
                     htmlFor="quality"
-                    className="mb-2 block text-sm font-medium text-gray-700"
+                    className="mb-2 block font-body text-small font-medium text-charcoal"
                   >
                     Video Quality
                   </label>
@@ -497,7 +497,7 @@ export default function Home() {
                     name="quality"
                     value={selectedQuality}
                     onChange={(e) => setSelectedQuality(e.target.value as "720p" | "1080p")}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-lg border-2 border-warmGold/20 px-4 py-3 font-body text-body transition-colors focus:border-christmasRed focus:ring-2 focus:ring-christmasRed/20"
                     disabled={isProcessing}
                   >
                     <option value="720p">720p Video (10 seconds) - £6.99</option>
@@ -507,10 +507,10 @@ export default function Home() {
 
                 {/* Scene Context - Optional */}
                 <div>
-                  <label htmlFor="sceneContext" className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="sceneContext" className="flex items-center gap-2 font-body text-small font-medium text-charcoal mb-2">
                     <span>📝</span>
                     Scene Context
-                    <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-normal text-yellow-700">
+                    <span className="rounded-full bg-warmGold/20 px-2 py-0.5 text-xs font-normal text-charcoal/70">
                       Optional
                     </span>
                   </label>
@@ -519,20 +519,20 @@ export default function Home() {
                     name="sceneContext"
                     value={sceneContext}
                     onChange={(e) => setSceneContext(e.target.value)}
-                    placeholder="e.g., 'Camera is on back wall. Door is to the left. Don't show Santa coming from below camera as that's a wall.'"
+                    placeholder="e.g., Camera is on back wall. Door is to the left. Don&apos;t show Santa coming from below camera as that&apos;s a wall."
                     rows={2}
                     maxLength={200}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                    className="w-full px-4 py-3 border-2 border-warmGold/20 rounded-lg focus:ring-2 focus:ring-christmasRed/20 focus:border-christmasRed transition-colors resize-none font-body text-body"
                     disabled={isProcessing}
                   />
-                  <p className="mt-1 text-xs text-gray-500">
-                    💡 Help us position Santa correctly by describing your camera location (e.g., "Camera on ceiling", "Doorbell view")
+                  <p className="mt-1 font-body text-small text-charcoal/60">
+                    💡 Help us position Santa correctly by describing your camera location (e.g., Camera on ceiling, Doorbell view)
                   </p>
                 </div>
 
                 {/* Compact File Upload Section */}
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label className="mb-2 block font-body text-small font-medium text-charcoal">
                     Upload Your Doorbell Screenshot
                   </label>
 
@@ -540,8 +540,8 @@ export default function Home() {
                     <div
                       className={`relative cursor-pointer overflow-hidden rounded-lg border-2 border-dashed p-6 text-center transition-all duration-300 ${
                         dragActive
-                          ? "border-green-500 bg-green-50"
-                          : "border-gray-300 bg-gray-50 hover:border-green-500 hover:bg-green-50"
+                          ? "border-evergreen bg-evergreen/5"
+                          : "border-warmGold/30 bg-cream hover:border-evergreen hover:bg-evergreen/5"
                       }`}
                       onDragEnter={handleDrag}
                       onDragLeave={handleDrag}
@@ -558,23 +558,23 @@ export default function Home() {
 
                       <div className="flex flex-col items-center">
                         <div className="mb-3 text-4xl">📷</div>
-                        <p className="mb-1 text-sm font-medium text-gray-700">
+                        <p className="mb-1 font-body text-body-sm font-medium text-charcoal">
                           Drag & drop or click to browse
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="font-body text-small text-charcoal/60">
                           JPG, PNG, WebP - Max 20MB
                         </p>
                       </div>
                     </div>
                   ) : (
-                    <div className="flex items-center justify-between rounded-lg border-2 border-green-500 bg-green-50 p-4">
+                    <div className="flex items-center justify-between rounded-lg border-2 border-evergreen bg-evergreen/5 p-4">
                       <div className="flex items-center space-x-3">
                         <div className="text-3xl">✅</div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="font-body text-body-sm font-medium text-charcoal">
                             {file.name}
                           </p>
-                          <p className="text-xs text-gray-600">
+                          <p className="font-body text-small text-charcoal/60">
                             {(file.size / 1024 / 1024).toFixed(2)} MB
                           </p>
                         </div>
@@ -582,7 +582,7 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={handleFileRemove}
-                        className="rounded-lg bg-red-500 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-red-600"
+                        className="rounded-lg bg-christmasRed px-3 py-1 font-body text-small font-bold text-white transition-colors hover:bg-christmasRed/90"
                         disabled={isProcessing}
                       >
                         Remove
@@ -595,7 +595,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isProcessing || !file}
-                  className="w-full rounded-lg bg-gradient-to-r from-red-500 to-green-500 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-red-600 hover:to-green-600 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                  className="btn-vibrant btn-magnetic w-full rounded-lg px-6 py-4 font-display text-body-lg font-bold text-white shadow-glow transition-all duration-300 hover:scale-105 hover:shadow-glow-lg disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isProcessing ? (
                     <div className="flex items-center justify-center space-x-2">
@@ -613,11 +613,11 @@ export default function Home() {
                     type="button"
                     onClick={handleTestGeneration}
                     disabled={isProcessing}
-                    className="w-full rounded-lg border-2 border-green-500 bg-green-500/10 px-6 py-3 text-sm font-bold text-green-600 transition-all duration-300 hover:scale-105 hover:bg-green-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-lg border-2 border-evergreen bg-evergreen/10 px-6 py-3 font-body text-body-sm font-bold text-evergreen transition-all duration-300 hover:scale-105 hover:bg-evergreen/20 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isProcessing ? (
                       <div className="flex items-center justify-center space-x-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-green-600"></div>
+                        <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-evergreen"></div>
                         <span>Starting Test Generation...</span>
                       </div>
                     ) : (

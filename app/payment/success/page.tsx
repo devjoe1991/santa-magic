@@ -62,7 +62,7 @@ function PaymentSuccessContent() {
 
           <div className="mt-8 space-y-4">
             <Link
-              href={`/order-status/${orderId}`}
+              href={`/processing?orderId=${orderId}`}
               className={cn(
                 buttonVariants({
                   size: "lg",
@@ -70,7 +70,7 @@ function PaymentSuccessContent() {
                 })
               )}
             >
-              Track Your Order
+              Watch Your Video Being Created! 🎬
               <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
 

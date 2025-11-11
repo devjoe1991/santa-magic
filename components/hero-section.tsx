@@ -13,7 +13,8 @@ import {
 
 // Flying Santa will be added via useEffect
 
-const COLORS_TOP = ["#FF0000", "#00FF00", "#FF3333", "#00CC00"];
+// Use Christmas theme colors
+const COLORS_TOP = ["#C1272D", "#1B4D3E", "#FFD700", "#C1272D"]; // christmasRed, evergreen, warmGold
 
 export const AuroraHero = () => {
   const color = useMotionValue(COLORS_TOP[0]);
@@ -48,13 +49,13 @@ export const AuroraHero = () => {
         <span className="mb-1.5 inline-block rounded-full bg-gray-600/50 px-3 py-1.5 text-sm">
           🎄 AI Magic Available Now!
         </span>
-        <h1 className="max-w-3xl bg-gradient-to-br from-white to-gray-400 bg-clip-text text-center text-2xl font-medium leading-tight text-transparent sm:text-3xl sm:leading-tight md:text-5xl md:leading-tight lg:text-7xl lg:leading-tight landscape:text-xl landscape:leading-tight">
+        <h1 className="max-w-3xl bg-gradient-to-br from-white to-gray-400 bg-clip-text text-center font-display leading-tight text-transparent text-display sm:text-display-lg landscape:text-hero">
           <span className="block">Your Doorbell</span>
           <span className="block">Our Magic</span>
         </h1>
-        <p className="my-4 max-w-xl text-center text-sm leading-relaxed sm:my-6 sm:text-base md:text-lg md:leading-relaxed landscape:my-2 landscape:text-xs landscape:leading-relaxed">
-          Upload your doorbell footage, pay £12.50, and watch Santa arrive at your doorstep using AI magic. 
-          <span className="block mt-2 font-semibold text-white">Create Christmas memories that last forever!</span>
+        <p className="my-4 max-w-xl text-center font-body text-body-sm leading-relaxed sm:my-6 sm:text-body md:text-body-lg md:leading-relaxed landscape:my-2 landscape:text-small landscape:leading-relaxed">
+          Upload your doorbell footage, pay £12.50, and watch Santa arrive at your doorstep using AI magic.
+          <span className="block mt-2 font-bold text-white">Create Christmas memories that last forever!</span>
         </p>
         <motion.button
           onClick={() => {
@@ -71,9 +72,9 @@ export const AuroraHero = () => {
           whileTap={{
             scale: 0.985,
           }}
-          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-3 py-2 text-gray-50 transition-colors hover:bg-gray-950/50 sm:px-4 landscape:px-2 landscape:py-1 landscape:text-sm cursor-pointer"
+          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-gray-950/10 px-3 py-2 font-body font-bold text-gray-50 transition-colors hover:bg-gray-950/50 sm:px-4 landscape:px-2 landscape:py-1 landscape:text-sm cursor-pointer"
         >
-          <span className="text-sm sm:text-base landscape:text-xs">🎅 See Santa Today!</span>
+          <span className="text-body-sm sm:text-body landscape:text-small">🎅 See Santa Today!</span>
           <FiArrowRight className="transition-transform group-hover:-rotate-45 group-active:-rotate-12 text-sm sm:text-base landscape:text-xs" />
         </motion.button>
       </div>

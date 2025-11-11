@@ -10,7 +10,13 @@ export async function analyzeScene(base64Image: string, userContext?: string): P
     if (userContext) {
       analysisPrompt = `USER PROVIDED CONTEXT: "${userContext}"
 
-IMPORTANT: Use this user context when determining santaZones, approachPath, and exitPath. The user knows their camera setup and scene layout - respect their constraints and suggestions about where Santa should or shouldn't appear from.
+CRITICAL: The user's constraints are BINDING, not suggestions. When determining santaZones, approachPath, and exitPath:
+- If user specifies positioning constraints (e.g., "don't come from below", "camera on back wall"), MUST reflect this in your analysis
+- If user says an area is a wall or obstacle, Santa CANNOT approach/exit from there
+- If user describes camera location, use this to determine realistic Santa movement zones
+- User knows their space better than the image shows - trust their spatial descriptions
+
+The user's context overrides what might seem visually possible in the image alone.
 
 ${analysisPrompt}`;
     }
@@ -74,8 +80,14 @@ Please analyze and return ONLY a valid JSON object with this exact structure:
 Focus on identifying optimal zones for Santa positioning:
 - Where Santa should appear to be clearly visible but natural
 - Natural approach/exit paths (left side, right side, along walls)
-- Areas to avoid (direct center, too close, too far)
-- Best positioning for a £5 video that excites children while feeling authentic
+- Areas to avoid (direct center, too close, too far, physical obstacles mentioned by user)
+- Best positioning for a video that excites children while feeling authentic
+
+IMPORTANT SANTA BEHAVIOR:
+- Santa MUST always carry his burlap sack (over shoulder or in hand)
+- Santa should NEVER place presents down or set the sack on the ground
+- Children need to see Santa HOLDING the presents, not placing them
+- Keep the sack visible and in Santa's possession throughout movement
 
 IMPORTANT: Determine sceneType, cameraType, and colorGrading:
 

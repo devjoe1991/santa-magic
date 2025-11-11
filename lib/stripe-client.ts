@@ -45,7 +45,7 @@ export async function createCheckoutSession(params: CreateCheckoutSessionParams)
       },
     ],
     mode: 'payment',
-    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/payment/success?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/processing?orderId=${orderId}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/payment/cancel?order_id=${orderId}`,
     metadata,
     expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes

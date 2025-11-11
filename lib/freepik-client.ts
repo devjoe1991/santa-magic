@@ -49,7 +49,7 @@ export class FreepikClient {
 
       // Enhance prompt with Christmas magic if requested
       const prompt = options.enhancePrompt
-        ? this.enhancePromptForChristmas(options.prompt, options.sceneAnalysis)
+        ? this.enhancePromptForChristmas(options.prompt, options.sceneAnalysis, options.userContext)
         : options.prompt;
 
       // Prepare the request
@@ -378,14 +378,24 @@ export class FreepikClient {
   /**
    * Enhance prompt with strict requirements to ensure Santa always appears naturally
    */
-  private enhancePromptForChristmas(originalPrompt: string, sceneAnalysis?: any): string {
+  private enhancePromptForChristmas(originalPrompt: string, sceneAnalysis?: any, userContext?: string): string {
     // Build a concise, focused prompt that won't overwhelm the API
     let enhanced = `Security camera footage. ${originalPrompt}. `;
 
     // Core Santa appearance - CONCISE but specific
     enhanced += `Traditional Father Christmas: plush red velvet suit, white fur trim, long white beard, rosy cheeks. `;
     enhanced += `Carrying large burlap sack of presents (NOT shopping bag). `;
-    enhanced += `Sneaking stealthily, unaware of camera, never looks at lens. `;
+
+    // CRITICAL CONSTRAINT: Santa never places presents down
+    enhanced += `Santa ALWAYS keeps sack over shoulder or in hand throughout video, NEVER places presents down or sets sack on ground. `;
+    enhanced += `Children need to see Santa HOLDING presents. `;
+
+    // CRITICAL MOVEMENT: Forward motion only, no backwards walking
+    enhanced += `Moving purposefully forward in one consistent direction, never walking backwards or reversing. `;
+    enhanced += `Confident, deliberate forward motion throughout entire video. `;
+    enhanced += `Santa walks naturally forward, unaware of camera, never looks at lens. `;
+    enhanced += `CRITICAL: Santa maintains forward walking direction throughout entire video, NEVER walks backwards or reverses course. `;
+    enhanced += `Forward-facing movement only, no backing up, no turning around mid-walk. `;
 
     // Minimal scene adaptation
     if (sceneAnalysis?.layout) {
@@ -399,13 +409,20 @@ export class FreepikClient {
     }
 
     // Essential technical requirements - BRIEF
-    enhanced += `Static camera, no movement. Natural shadows. Realistic scale and depth.`;
+    enhanced += `Static camera, no movement. Natural shadows. Realistic scale and depth. `;
+
+    // Add user context constraints if provided
+    if (userContext && userContext.trim()) {
+      enhanced += `IMPORTANT USER CONSTRAINTS: ${userContext.trim()}. `;
+      enhanced += `Respect these positioning and movement constraints from camera owner.`;
+    }
 
     console.log('Enhanced prompt:', {
       original: originalPrompt.substring(0, 100) + '...',
-      enhanced: enhanced.substring(0, 200) + '...',
+      enhanced: enhanced.substring(0, 250) + '...',
       fullLength: enhanced.length,
-      hasSceneAnalysis: !!sceneAnalysis
+      hasSceneAnalysis: !!sceneAnalysis,
+      hasUserContext: !!userContext
     });
 
     return enhanced;

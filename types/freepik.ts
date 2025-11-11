@@ -87,6 +87,7 @@ export interface VideoGenerationOptions {
   aspectRatio?: '16:9' | '9:16' | '1:1';
   cfgScale?: number;
   sceneAnalysis?: any; // Scene analysis data for smart prompt enhancement
+  userContext?: string; // User-provided scene context/constraints
   metadata?: {
     analysisId: string;
     promptId: string;
@@ -171,6 +172,26 @@ export const DEFAULT_CHRISTMAS_ENHANCEMENTS: ChristmasPromptEnhancement = {
     'regular person',
     'not santa',
     'wrong character',
-    'different person'
+    'different person',
+    'walking backwards',
+    'backward movement',
+    'backing up',
+    'moving backwards',
+    'reversing direction',
+    'moonwalking',
+    'walking in reverse',
+    'retreating backwards',
+    'stepping backwards',
+    'turning around mid-walk',
+    'spinning around',
+    'facing backwards',
+    'backwards motion',
+    'confused movement',
+    'disoriented walking',
+    'erratic movement',
+    'wandering aimlessly',
+    'uncertain direction',
+    'hesitant walking',
+    'indecisive movement'
   ]
 };
